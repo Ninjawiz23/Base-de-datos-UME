@@ -208,14 +208,50 @@
     }
 
     function obtenerPartesFecha(valor) {
-      if (!valor) return null;
+      if (valor === null || valor === undefined || valor === "") return null;
+
+      // Si llega como objeto Date, usamos sus componentes UTC para evitar
+      // que la zona horaria cambie el día.
+      if (valor instanceof Date && !Number.isNaN(valor.getTime())) {
+        return {
+          anio: valor.getUTCFullYear(),
+          mes: valor.getUTCMonth() + 1,
+          dia: valor.getUTCDate()
+        };
+      }
+
       const texto = String(valor).trim();
-      const iso = texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
-      if (iso) return { anio: Number(iso[1]), mes: Number(iso[2]), dia: Number(iso[3]) };
+
+      // Formatos ISO: 2026-08-22 o 2026-08-22T00:00:00.000Z
+      const iso = texto.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:T|\s|$)/);
+      if (iso) {
+        return {
+          anio: Number(iso[1]),
+          mes: Number(iso[2]),
+          dia: Number(iso[3])
+        };
+      }
+
+      // Formato español: 22/08/2026. Se interpreta siempre como DD/MM/AAAA.
       const espana = texto.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-      if (espana) return { anio: Number(espana[3]), mes: Number(espana[2]), dia: Number(espana[1]) };
+      if (espana) {
+        return {
+          anio: Number(espana[3]),
+          mes: Number(espana[2]),
+          dia: Number(espana[1])
+        };
+      }
+
+      // Último recurso para fechas textuales devueltas por Google Sheets.
       const fecha = new Date(texto);
-      if (!Number.isNaN(fecha.getTime())) return { anio: fecha.getUTCFullYear(), mes: fecha.getUTCMonth()+1, dia: fecha.getUTCDate() };
+      if (!Number.isNaN(fecha.getTime())) {
+        return {
+          anio: fecha.getUTCFullYear(),
+          mes: fecha.getUTCMonth() + 1,
+          dia: fecha.getUTCDate()
+        };
+      }
+
       return null;
     }
 
@@ -389,7 +425,7 @@
 
       const duplicado = registros.some(registro => {
         return normalizarTexto(registro.agente) === normalizarTexto(agente) &&
-          String(registro.fecha).slice(0, 10) === fecha &&
+          fechaParaOrdenar(registro.fecha) === fechaParaOrdenar(fecha) &&
           registro.clip === clip;
       });
 
