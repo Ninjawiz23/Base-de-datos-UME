@@ -1,4 +1,425 @@
-<script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SISTEMA UME // HISPANLIFE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --os-bg: #090d13;
+      --os-window: #111827;
+      --os-header: #1f293d;
+      --os-border: #2e3d5b;
+      --os-cyan: #00f0ff;
+      --os-cyan-dim: rgba(0, 240, 255, 0.15);
+      --os-text: #e2e8f0;
+      --os-muted: #8899ac;
+      --os-success: #10b981;
+      --os-error: #ef4444;
+      --os-accent: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'IBM Plex Mono', monospace;
+      background: var(--os-bg);
+      background-image: 
+        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+      background-size: 32px 32px;
+      color: var(--os-text);
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+    .wrap { width: min(1140px, calc(100% - 32px)); margin: auto; }
+    
+    .tabnav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #080b11;
+      border-bottom: 2px solid var(--os-border);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+    .tabnav .inner {
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .logos { display: flex; align-items: center; gap: 12px; }
+    .fake-logo, .mini-logo {
+      display: grid;
+      place-items: center;
+      border-radius: 4px;
+      border: 1px solid var(--os-cyan);
+      background: var(--os-cyan-dim);
+      font-size: 14px;
+    }
+    .fake-logo { width: 34px; height: 34px; }
+    .mini-logo { width: 28px; height: 28px; }
+    .divider { width: 1px; height: 24px; background: var(--os-border); }
+    .brand-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.1em;
+    }
+    .brand-text small {
+      display: block;
+      font-size: 10px;
+      color: var(--os-muted);
+      font-weight: 400;
+      letter-spacing: 0.05em;
+    }
+    .navlinks button {
+      color: var(--os-cyan);
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid var(--os-cyan);
+      border-radius: 4px;
+      padding: 8px 16px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .navlinks button:hover {
+      background: var(--os-cyan);
+      color: #000;
+      box-shadow: 0 0 12px var(--os-cyan-dim);
+    }
+
+    .hero { padding: 32px 0 20px; }
+    .hero .wrap {
+      border: 1px solid var(--os-border);
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 6px;
+      padding: 24px;
+      position: relative;
+    }
+    .hero .wrap::before {
+      content: "SYS_TERM // SECURE CONNECTION ESTABLISHED";
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      background: var(--os-border);
+      color: var(--os-cyan);
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 2px;
+      letter-spacing: 0.1em;
+    }
+    .case-no {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--os-muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      letter-spacing: 0.05em;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(0,240,255,0.2);
+    }
+    .sub { margin: 8px 0 16px; color: var(--os-muted); font-size: 0.95rem; }
+    .cta-row { display: flex; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--os-border); padding-top: 16px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 16px;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all .2s;
+    }
+    .btn.tab-btn {
+      background: transparent;
+      color: var(--os-muted);
+      border: 1px solid var(--os-border);
+    }
+    .btn.tab-btn.activo {
+      background: var(--os-cyan);
+      color: #000;
+      border-color: var(--os-cyan);
+      box-shadow: 0 0 10px var(--os-cyan-dim);
+    }
+    .btn.tab-btn:not(.activo):hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+    section { padding: 20px 0; }
+    .eyebrow { font-size: 11px; letter-spacing: 0.15em; color: var(--os-cyan); text-transform: uppercase; margin-bottom: 4px; }
+    section h2 { font-size: 1.4rem; letter-spacing: 0.05em; text-transform: uppercase; color: #fff; }
+    .section-intro { margin: 6px 0 18px; color: var(--os-muted); font-size: 12px; }
+
+    .panel-grid { position: relative; width: 100%; }
+    .doc-panel {
+      display: none;
+      width: 100%;
+      background: var(--os-window);
+      color: var(--os-text);
+      border: 1px solid var(--os-border);
+      border-radius: 6px;
+      padding: 24px;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.5);
+    }
+    .doc-panel.activo { display: block; }
+
+    .doc-panel h3 { font-size: 1.25rem; text-transform: uppercase; color: #fff; margin-bottom: 16px; }
+    
+    .field-grid, .field { display: grid; gap: 14px; }
+    .field { gap: 6px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    label { font-size: 11px; font-weight: 700; color: var(--os-accent); text-transform: uppercase; letter-spacing: 0.05em; }
+    input {
+      width: 100%;
+      background: #090d13;
+      border: 1px solid var(--os-border);
+      border-radius: 4px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: #fff;
+      outline: none;
+      font-family: inherit;
+    }
+    input:focus { border-color: var(--os-cyan); box-shadow: 0 0 8px var(--os-cyan-dim); }
+    .hint { font-size: 11px; color: var(--os-muted); }
+
+    .upload-box {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .file-btn {
+      flex-shrink: 0;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px dashed var(--os-cyan);
+      color: var(--os-cyan);
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      text-align: center;
+      transition: all .2s;
+    }
+    .file-btn:hover {
+      background: var(--os-cyan);
+      color: #000;
+    }
+    #archivoImagen { display: none; }
+    .file-selected {
+      font-size: 11px;
+      color: var(--os-success);
+      word-break: break-all;
+    }
+
+    .doc-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .btn.dark { background: var(--os-cyan); color: #000; border-color: var(--os-cyan); }
+    .btn.dark:hover { background: #5ef5ff; }
+    .btn.paper { background: transparent; color: var(--os-text); border: 1px solid var(--os-border); }
+    .btn.paper:hover { border-color: #fff; background: rgba(255,255,255,0.05); }
+
+    .preview-box {
+      margin-top: 18px;
+      min-height: 100px;
+      background: #080c14;
+      border: 1px solid var(--os-border);
+      border-left: 3px solid var(--os-cyan);
+      border-radius: 4px;
+      padding: 14px;
+      white-space: pre-line;
+      font-size: 12px;
+      color: #cbd5e1;
+      font-family: inherit;
+    }
+    .count-board { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+    .kpi {
+      background: #0a0f18;
+      border: 1px solid var(--os-border);
+      border-radius: 4px;
+      padding: 16px;
+    }
+    .kpi span { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--os-muted); }
+    .kpi strong { display: block; font-family: 'Share Tech Mono', monospace; font-size: 1.8rem; color: var(--os-cyan); margin-top: 4px; }
+    .status { margin-top: 10px; font-weight: 700; font-size: 12px; }
+    .status.ok { color: var(--os-success); }
+    .status.error { color: var(--os-error); }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: blur(4px);
+    }
+    .modal.abierto { display: flex; }
+    .modal-card {
+      width: min(420px, 100%);
+      background: var(--os-window);
+      border: 1px solid var(--os-cyan);
+      border-radius: 6px;
+      padding: 24px;
+      box-shadow: 0 0 30px rgba(0,240,255,0.15);
+      position: relative;
+    }
+    .modal-card::before {
+      content: "AUTH_GATEWAY // PROMPT";
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      background: var(--os-border);
+      color: var(--os-cyan);
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 2px;
+    }
+    .modal-card h2 { font-size: 1.2rem; margin-bottom: 6px; color: #fff; text-transform: uppercase; }
+    .modal-card p { color: var(--os-muted); font-size: 12px; margin-bottom: 16px; }
+    .modal-card label { display: block; margin-bottom: 6px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+    .modal-actions button {
+      height: 36px;
+      padding: 0 16px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+    .btn-cancelar { background: transparent; border-color: var(--os-border) !important; color: var(--os-muted); }
+    .btn-cancelar:hover { background: rgba(255,255,255,0.05); color: #fff; }
+    .btn-entrar { background: var(--os-cyan); color: #000; }
+    .btn-entrar:hover { background: #5ef5ff; }
+    .modal-error { display: none; color: var(--os-error); font-size: 11px; margin-top: 8px; }
+    .modal-error.visible { display: block; }
+
+    @media(max-width:768px) {
+      .field-row, .count-board { grid-template-columns: 1fr; }
+      .upload-box { flex-direction: column; align-items: stretch; }
+      .tabnav .inner { flex-direction: column; align-items: flex-start; padding: 10px 0; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="tabnav">
+    <div class="wrap inner">
+      <div class="logos">
+        <div class="fake-logo">⚡</div>
+        <div class="divider"></div>
+        <div class="mini-logo">🛡️</div>
+        <span class="brand-text">UME<small>HISPANLIFE RP</small></span>
+      </div>
+      <div class="navlinks">
+        <button id="abrirJefatura" type="button">Panel Jefatura</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <div class="case-no">SISTEMA UME // IDENT: REGISTRO-ACT-2026</div>
+      <h1>SISTEMA OPERATIVO UME</h1>
+      <p class="sub">Módulo de registro rápido de reanimaciones e historial individual.</p>
+      <div class="cta-row">
+        <button class="btn tab-btn activo" type="button" id="abrirRegistro">Registrar revive</button>
+        <button class="btn tab-btn" type="button" id="abrirRecuento">Ver recuento</button>
+      </div>
+    </div>
+  </header>
+
+  <section id="panel">
+    <div class="wrap">
+      <div class="eyebrow">MOD_OPERATIVO</div>
+      <h2>Terminal de Operaciones</h2>
+      <p class="section-intro">Introduce y consulta datos operativos sincronizados en tiempo real.</p>
+
+      <div class="panel-grid">
+        <div class="doc-panel activo" id="registro">
+          <h3>Registrar Reanimación</h3>
+          <div class="field-grid">
+            <div class="field">
+              <label for="agente">Nombre del agente</label>
+              <input id="agente" placeholder="Ej. Nil Pérez">
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="fecha">Fecha del servicio</label>
+                <input id="fecha" type="date">
+              </div>
+              <div class="field">
+                <label for="clip">Enlace (Clip / URL) o Archivo de Imagen</label>
+                <div class="upload-box">
+                  <input id="clip" type="text" placeholder="https://clip.com/... o https://i.imgur.com/...">
+                  <label for="archivoImagen" class="file-btn">Subir PC</label>
+                  <input type="file" id="archivoImagen" accept="image/*">
+                </div>
+                <div id="fileInfo" class="file-selected" style="display:none;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="doc-actions">
+            <button class="btn dark" type="button" id="guardarBtn">Guardar registro</button>
+            <button class="btn paper" type="button" id="copiarBtn">Copiar texto</button>
+          </div>
+          <div class="status" id="statusRegistro"></div>
+          <div class="preview-box" id="previewRegistro">Aquí aparecerá el texto generado del registro.</div>
+        </div>
+
+        <div class="doc-panel" id="recuento">
+          <h3>Consulta por Agente</h3>
+          <div class="field search-box">
+            <label for="buscarAgente">Agente a buscar</label>
+            <input id="buscarAgente" placeholder="Escribe el nombre del agente...">
+            <div class="hint">Filtro dinámico de registros en búfer local.</div>
+          </div>
+          <div class="count-board">
+            <div class="kpi"><span>Registros encontrados</span><strong id="resultadoRecuento">0</strong></div>
+            <div class="kpi"><span>Última fecha</span><strong id="ultimaFecha">—</strong></div>
+          </div>
+          <div class="preview-box" id="listadoAgente">No hay registros para este agente.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="wrap"></footer>
+
+  <div class="modal" id="modalJefatura" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>Acceso Jefatura</h2>
+      <p>Credenciales de autorización requeridas.</p>
+      <label for="contrasenaJefatura">Password de seguridad</label>
+      <input id="contrasenaJefatura" type="password" placeholder="••••••••">
+      <div class="modal-error" id="errorJefatura">Acceso denegado. Clave no válida.</div>
+      <div class="modal-actions">
+        <button class="btn-cancelar" id="cancelarJefatura" type="button">Cancelar</button>
+        <button class="btn-entrar" id="entrarJefatura" type="button">Autenticar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
     const URL_APPS_SCRIPT =
       "https://script.google.com/macros/s/AKfycbzFAxE_bUtyto2tTELFqY-Kn4fugVsFf3aUH56nhceAsPkjXdhCTE67e5xwHL0_BhyAjg/exec";
 
@@ -12,7 +433,6 @@
     const abrirRecuento = document.getElementById("abrirRecuento");
     const panelRegistro = document.getElementById("registro");
     const panelRecuento = document.getElementById("recuento");
-    const panelGrid = document.querySelector(".panel-grid");
     const agenteInput = document.getElementById("agente");
     const fechaInput = document.getElementById("fecha");
     const clipInput = document.getElementById("clip");
@@ -27,9 +447,6 @@
     const ultimaFecha = document.getElementById("ultimaFecha");
     const listadoAgente = document.getElementById("listadoAgente");
 
-    let hojaActual = "registro";
-    let cambiando = false;
-
     function obtenerFechaLocalISO() {
       const ahora = new Date();
       const local = new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000);
@@ -38,7 +455,6 @@
 
     fechaInput.value = obtenerFechaLocalISO();
 
-    // Redimensiona y comprime la imagen para evitar desbordar Apps Script
     function optimizarImagen(file, callback) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -62,7 +478,6 @@
           const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0, width, height);
 
-          // Devuelve base64 comprimido en JPEG
           const dataUrl = canvas.toDataURL("image/jpeg", 0.75);
           callback(dataUrl);
         };
@@ -98,36 +513,22 @@
       }
     });
 
-    function ajustarAlturaPanel() {
-      const activo = document.querySelector(".doc-panel.activo");
-      if (activo) panelGrid.style.minHeight = `${activo.offsetHeight}px`;
-    }
-
     function mostrarHoja(hoja) {
-      if (cambiando || hoja === hojaActual) return;
-      cambiando = true;
-
-      const anterior = hojaActual === "registro" ? panelRegistro : panelRecuento;
-      const siguiente = hoja === "registro" ? panelRegistro : panelRecuento;
-      const esRegistro = hoja === "registro";
-
-      abrirRegistro.classList.toggle("activo", esRegistro);
-      abrirRecuento.classList.toggle("activo", !esRegistro);
-      siguiente.classList.add("activo", esRegistro ? "entrando-izquierda" : "entrando-derecha");
-      anterior.classList.add(esRegistro ? "saliendo-derecha" : "saliendo-izquierda");
-
-      setTimeout(() => {
-        anterior.classList.remove("activo", "saliendo-derecha", "saliendo-izquierda");
-        siguiente.classList.remove("entrando-derecha", "entrando-izquierda");
-        hojaActual = hoja;
-        cambiando = false;
-        ajustarAlturaPanel();
-      }, 250);
+      if (hoja === "registro") {
+        abrirRegistro.classList.add("activo");
+        abrirRecuento.classList.remove("activo");
+        panelRegistro.classList.add("activo");
+        panelRecuento.classList.remove("activo");
+      } else {
+        abrirRegistro.classList.remove("activo");
+        abrirRecuento.classList.add("activo");
+        panelRegistro.classList.remove("activo");
+        panelRecuento.classList.add("activo");
+      }
     }
 
     abrirRegistro.addEventListener("click", () => mostrarHoja("registro"));
     abrirRecuento.addEventListener("click", () => mostrarHoja("recuento"));
-    window.addEventListener("resize", ajustarAlturaPanel);
 
     function esUrlValida(url) {
       try {
@@ -139,7 +540,7 @@
     }
 
     function obtenerPartesFecha(valor) {
-      if (valor === null || valor === undefined || valor === "") return null;
+      if (!valor) return null;
       const texto = String(valor).trim();
       const fechaPura = texto.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
       if (fechaPura) {
@@ -156,16 +557,6 @@
           mes: Number(espana[2]),
           dia: Number(espana[1])
         };
-      }
-      if (/^\d{4}-\d{1,2}-\d{1,2}[T\s]/.test(texto)) {
-        const fechaHora = new Date(texto);
-        if (!Number.isNaN(fechaHora.getTime())) {
-          return {
-            anio: fechaHora.getFullYear(),
-            mes: fechaHora.getMonth() + 1,
-            dia: fechaHora.getDate()
-          };
-        }
       }
       const fecha = new Date(texto);
       if (!Number.isNaN(fecha.getTime())) {
@@ -287,8 +678,6 @@
             ].join("\n");
           }).join("\n\n")
         : "No hay registros para este agente.";
-
-      ajustarAlturaPanel();
     }
 
     async function cargarRegistros() {
@@ -368,10 +757,10 @@
         const nuevoReg = { agente, fecha, clip: urlFinal };
         registros.unshift(nuevoReg);
         previewRegistro.textContent = generarTextoRegistro(nuevoReg);
-        statusRegistro.textContent = "Registro e imagen guardados correctamente.";
+        statusRegistro.textContent = "Registro guardado correctamente.";
         statusRegistro.classList.add("ok");
 
-        // Limpieza de campos
+        // Reset de campos
         agenteInput.value = "";
         clipInput.value = "";
         clipInput.placeholder = "https://clip.com/... o https://i.imgur.com/...";
@@ -388,7 +777,6 @@
       } finally {
         guardarBtn.disabled = false;
         guardarBtn.textContent = "Guardar registro";
-        ajustarAlturaPanel();
       }
     });
 
@@ -456,5 +844,6 @@
 
     cargarRegistros();
     setInterval(cargarRegistros, 5000);
-    setTimeout(ajustarAlturaPanel, 0);
   </script>
+</body>
+</html>
