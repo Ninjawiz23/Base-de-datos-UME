@@ -210,29 +210,20 @@
     function obtenerPartesFecha(valor) {
       if (valor === null || valor === undefined || valor === "") return null;
 
-      // Si llega como objeto Date, usamos sus componentes UTC para evitar
-      // que la zona horaria cambie el día.
-      if (valor instanceof Date && !Number.isNaN(valor.getTime())) {
-        return {
-          anio: valor.getUTCFullYear(),
-          mes: valor.getUTCMonth() + 1,
-          dia: valor.getUTCDate()
-        };
-      }
-
       const texto = String(valor).trim();
 
-      // Formatos ISO: 2026-08-22 o 2026-08-22T00:00:00.000Z
-      const iso = texto.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:T|\s|$)/);
-      if (iso) {
+      // Fecha pura enviada por el formulario: YYYY-MM-DD.
+      // No se convierte a Date para evitar desplazamientos por zona horaria.
+      const fechaPura = texto.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      if (fechaPura) {
         return {
-          anio: Number(iso[1]),
-          mes: Number(iso[2]),
-          dia: Number(iso[3])
+          anio: Number(fechaPura[1]),
+          mes: Number(fechaPura[2]),
+          dia: Number(fechaPura[3])
         };
       }
 
-      // Formato español: 22/08/2026. Se interpreta siempre como DD/MM/AAAA.
+      // Fecha española: DD/MM/AAAA.
       const espana = texto.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
       if (espana) {
         return {
@@ -242,13 +233,26 @@
         };
       }
 
-      // Último recurso para fechas textuales devueltas por Google Sheets.
+      // Si Google Sheets devuelve una fecha con hora y zona horaria,
+      // la interpretamos como instante real y obtenemos el día local.
+      // Así no se queda con el día UTC incorrecto.
+      if (/^\d{4}-\d{1,2}-\d{1,2}[T\s]/.test(texto)) {
+        const fechaHora = new Date(texto);
+        if (!Number.isNaN(fechaHora.getTime())) {
+          return {
+            anio: fechaHora.getFullYear(),
+            mes: fechaHora.getMonth() + 1,
+            dia: fechaHora.getDate()
+          };
+        }
+      }
+
       const fecha = new Date(texto);
       if (!Number.isNaN(fecha.getTime())) {
         return {
-          anio: fecha.getUTCFullYear(),
-          mes: fecha.getUTCMonth() + 1,
-          dia: fecha.getUTCDate()
+          anio: fecha.getFullYear(),
+          mes: fecha.getMonth() + 1,
+          dia: fecha.getDate()
         };
       }
 
