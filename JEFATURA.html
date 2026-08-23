@@ -26,10 +26,29 @@ rangos.forEach(r=>{const o=document.createElement("option");o.value=r;o.textCont
 function normalizar(t){return String(t||"").toLocaleLowerCase("es").normalize("NFD").replace(/[\u0300-\u036f]/g,"")}function identidades(a){return [a.apodo,a.nombre,`${a.apodo} ${a.nombre}`,`${a.nombre} ${a.apodo}`,a.identificacion].map(normalizar).filter(Boolean)}function fechaTexto(f){
   if(!f)return"—";
   const valor=String(f).trim();
-  const iso=valor.match(/^(\d{4})-(\d{2})-(\d{2})(?:[T\s].*)?$/);
+
+  // Si Google Apps Script envía una fecha/hora ISO en UTC, por ejemplo
+  // 2026-08-22T22:00:00.000Z, se muestra en la zona horaria de España.
+  // Así corresponde al día real de la hoja: 23/08/2026.
+  if(/^\d{4}-\d{2}-\d{2}T/.test(valor)){
+    const d=new Date(valor);
+    if(!Number.isNaN(d.getTime())){
+      return new Intl.DateTimeFormat("es-ES",{
+        timeZone:"Europe/Madrid",
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric"
+      }).format(d);
+    }
+  }
+
+  // Si llega solo la fecha YYYY-MM-DD, no se convierte de zona horaria.
+  const iso=valor.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if(iso)return `${iso[3]}/${iso[2]}/${iso[1]}`;
+
   const es=valor.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/);
   if(es)return `${es[1].padStart(2,"0")}/${es[2].padStart(2,"0")}/${es[3]}`;
+
   return valor;
 }function nombreVisible(a){return a.nombre?`${a.apodo} · ${a.nombre}`:a.apodo}function registrosDelAgente(a){const nombres=identidades(a);return registros.filter(r=>{const registrado=normalizar(r.agente);return nombres.some(n=>registrado===n||registrado.includes(n)||n.includes(registrado))})}
 function pintar(){const q=normalizar(buscarAgente.value);listaRangos.innerHTML="";let visibles=0,total=0;agentes.forEach(g=>{const ms=g.miembros.filter(a=>!q||normalizar(`${identidades(a).join(" ")} ${g.rango}`).includes(q));if(!ms.length)return;const bloque=document.createElement("section");bloque.className="rank-block";bloque.innerHTML=`<h3 class="rank-title">${g.rango}</h3>`;const grid=document.createElement("div");grid.className="agent-grid";ms.forEach(a=>{const cantidad=registrosDelAgente(a).length;visibles++;total+=cantidad;const card=document.createElement("button");card.type="button";card.className="agent-card";card.innerHTML=`<div class="agent-rank">${g.rango}</div><div class="agent-name">${nombreVisible(a)}</div>${a.identificacion?`<div class="agent-id">Identificación: ${a.identificacion}</div>`:""}<div class="agent-count"><strong>${cantidad}</strong><span>reanimaciones</span></div><span class="edit-agent" title="Editar perfil" aria-label="Editar perfil">✎</span>`;card.addEventListener("click",()=>abrirDetalle(a,g.rango));card.querySelector(".edit-agent").addEventListener("click",e=>{e.stopPropagation();abrirEditor(a,g.rango)});grid.appendChild(card)});bloque.appendChild(grid);listaRangos.appendChild(bloque)});totalReanimaciones.textContent=total;mensajeVacio.hidden=visibles!==0}
