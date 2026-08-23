@@ -147,7 +147,6 @@
     const agenteInput = document.getElementById("agente");
     const fechaInput = document.getElementById("fecha");
     const clipInput = document.getElementById("clip");
-    const archivoMediaInput = document.getElementById("archivoMedia");
     const guardarBtn = document.getElementById("guardarBtn");
     const copiarBtn = document.getElementById("copiarBtn");
     const previewRegistro = document.getElementById("previewRegistro");
@@ -166,8 +165,7 @@
       return local.toISOString().slice(0, 10);
     }
 
-    // La fecha se conserva como valor del registro; no se fuerza con el reloj del navegador.
-    fechaInput.value = "";
+    fechaInput.value = obtenerFechaLocalISO();
 
     function ajustarAlturaPanel() {
       const activo = document.querySelector(".doc-panel.activo");
@@ -272,50 +270,13 @@
       return `${String(p.dia).padStart(2, "0")}/${String(p.mes).padStart(2, "0")}/${p.anio}`;
     }
 
-    function obtenerMedia(registro) {
-      return registro.media || registro.clip || "";
-    }
-
-    function esImagen(valor) {
-      const v = String(valor || "").toLowerCase();
-      return /^data:image\//.test(v) || /\.(png|jpe?g|gif|webp|bmp|svg)(\?.*)?$/.test(v) ||
-        /image|imagen|screenshot|captura/.test(v);
-    }
-
-    async function convertirArchivoABase64(archivo) {
-      if (!archivo.type.startsWith("image/")) throw new Error("Selecciona una imagen válida.");
-
-      const img = await new Promise((resolve, reject) => {
-        const url = URL.createObjectURL(archivo);
-        const imagen = new Image();
-        imagen.onload = () => { URL.revokeObjectURL(url); resolve(imagen); };
-        imagen.onerror = () => { URL.revokeObjectURL(url); reject(new Error("No se pudo leer la imagen.")); };
-        imagen.src = url;
-      });
-
-      let max = 700;
-      let calidad = 0.62;
-      for (let intento = 0; intento < 5; intento++) {
-        const escala = Math.min(1, max / Math.max(img.width, img.height));
-        const canvas = document.createElement("canvas");
-        canvas.width = Math.max(1, Math.round(img.width * escala));
-        canvas.height = Math.max(1, Math.round(img.height * escala));
-        canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-        const data = canvas.toDataURL("image/jpeg", calidad);
-        if (data.length <= 42000) return data;
-        max = Math.round(max * 0.75);
-        calidad = Math.max(0.35, calidad - 0.08);
-      }
-      throw new Error("La imagen es demasiado grande. Prueba con una captura más pequeña.");
-    }
-
     function generarTextoRegistro(registro) {
       return [
         "REGISTRO UME · PERSONA REVIVIDA",
         "",
         `Agente: ${registro.agente}`,
         `Fecha: ${formatearFecha(registro.fecha)}`,
-        `Adjunto: ${obtenerMedia(registro)}`
+        `Clip: ${registro.clip}`
       ].join("\n");
     }
 
@@ -400,7 +361,7 @@
             `REGISTRO ${indice + 1} · PERSONA REVIVIDA`,
             `Agente: ${registro.agente}`,
             `Fecha: ${formatearFecha(registro.fecha)}`,
-            `Adjunto: ${obtenerMedia(registro)}`
+            `Clip: ${registro.clip}`
           ].join("\n")).join("\n\n")
         : "No hay registros para este agente.";
 
@@ -453,35 +414,23 @@
       const agente = agenteInput.value.trim();
       const fecha = fechaInput.value;
       const clip = clipInput.value.trim();
-      const archivo = archivoMediaInput.files[0];
 
-      if (!agente || !fecha || (!clip && !archivo)) {
-        statusRegistro.textContent = "Completa nombre del agente, fecha y un clip, enlace o imagen.";
+      if (!agente || !fecha || !clip) {
+        statusRegistro.textContent = "Completa nombre del agente, fecha y clip.";
         statusRegistro.classList.add("error");
         return;
       }
 
-      if (clip && !esUrlValida(clip)) {
-        statusRegistro.textContent = "El enlace debe ser válido.";
+      if (!esUrlValida(clip)) {
+        statusRegistro.textContent = "El clip debe ser un enlace válido.";
         statusRegistro.classList.add("error");
         return;
-      }
-
-      let contenido = clip;
-      if (archivo) {
-        try {
-          contenido = await convertirArchivoABase64(archivo);
-        } catch (error) {
-          statusRegistro.textContent = error.message || "No se pudo procesar la imagen seleccionada.";
-          statusRegistro.classList.add("error");
-          return;
-        }
       }
 
       const duplicado = registros.some(registro => {
         return normalizarTexto(registro.agente) === normalizarTexto(agente) &&
           fechaParaOrdenar(registro.fecha) === fechaParaOrdenar(fecha) &&
-          obtenerMedia(registro) === contenido;
+          registro.clip === clip;
       });
 
       if (duplicado) {
@@ -490,7 +439,7 @@
         return;
       }
 
-      const registro = { agente, fecha, clip: contenido };
+      const registro = { agente, fecha, clip };
       guardarBtn.disabled = true;
       guardarBtn.textContent = "Guardando...";
 
