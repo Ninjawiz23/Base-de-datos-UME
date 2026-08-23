@@ -1,400 +1,12 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA UME // HISPANLIFE</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --os-bg: #090d13;
-      --os-window: #111827;
-      --os-header: #1f293d;
-      --os-border: #2e3d5b;
-      --os-cyan: #00f0ff;
-      --os-cyan-dim: rgba(0, 240, 255, 0.15);
-      --os-text: #e2e8f0;
-      --os-muted: #8899ac;
-      --os-success: #10b981;
-      --os-error: #ef4444;
-      --os-accent: #38bdf8;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'IBM Plex Mono', monospace;
-      background: var(--os-bg);
-      background-image: 
-        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-      background-size: 32px 32px;
-      color: var(--os-text);
-      min-height: 100vh;
-      padding-bottom: 40px;
-    }
-    .wrap { width: min(1140px, calc(100% - 32px)); margin: auto; }
-    
-    .tabnav {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: #080b11;
-      border-bottom: 2px solid var(--os-border);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-    }
-    .tabnav .inner {
-      min-height: 54px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .logos { display: flex; align-items: center; gap: 12px; }
-    .fake-logo, .mini-logo {
-      display: grid;
-      place-items: center;
-      border-radius: 4px;
-      border: 1px solid var(--os-cyan);
-      background: var(--os-cyan-dim);
-      font-size: 14px;
-    }
-    .fake-logo { width: 34px; height: 34px; }
-    .mini-logo { width: 28px; height: 28px; }
-    .divider { width: 1px; height: 24px; background: var(--os-border); }
-    .brand-text {
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: 0.1em;
-    }
-    .brand-text small {
-      display: block;
-      font-size: 10px;
-      color: var(--os-muted);
-      font-weight: 400;
-      letter-spacing: 0.05em;
-    }
-    .navlinks button {
-      color: var(--os-cyan);
-      font-size: 12px;
-      font-weight: 700;
-      background: rgba(0, 240, 255, 0.05);
-      border: 1px solid var(--os-cyan);
-      border-radius: 4px;
-      padding: 8px 16px;
-      cursor: pointer;
-      text-transform: uppercase;
-      font-family: inherit;
-      transition: all .2s;
-    }
-    .navlinks button:hover {
-      background: var(--os-cyan);
-      color: #000;
-      box-shadow: 0 0 12px var(--os-cyan-dim);
-    }
-
-    .hero { padding: 32px 0 20px; }
-    .hero .wrap {
-      border: 1px solid var(--os-border);
-      background: rgba(17, 24, 39, 0.7);
-      backdrop-filter: blur(8px);
-      border-radius: 6px;
-      padding: 24px;
-      position: relative;
-    }
-    .hero .wrap::before {
-      content: "SYS_TERM // SECURE CONNECTION ESTABLISHED";
-      position: absolute;
-      top: -10px;
-      left: 16px;
-      background: var(--os-border);
-      color: var(--os-cyan);
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 2px;
-      letter-spacing: 0.1em;
-    }
-    .case-no {
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      color: var(--os-muted);
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    h1 {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      letter-spacing: 0.05em;
-      color: #fff;
-      text-shadow: 0 0 10px rgba(0,240,255,0.2);
-    }
-    .sub { margin: 8px 0 16px; color: var(--os-muted); font-size: 0.95rem; }
-    .cta-row { display: flex; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--os-border); padding-top: 16px; }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 38px;
-      padding: 0 16px;
-      border-radius: 4px;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 700;
-      text-decoration: none;
-      border: 1px solid transparent;
-      cursor: pointer;
-      text-transform: uppercase;
-      transition: all .2s;
-    }
-    .btn.tab-btn {
-      background: transparent;
-      color: var(--os-muted);
-      border: 1px solid var(--os-border);
-    }
-    .btn.tab-btn.activo {
-      background: var(--os-cyan);
-      color: #000;
-      border-color: var(--os-cyan);
-      box-shadow: 0 0 10px var(--os-cyan-dim);
-    }
-    .btn.tab-btn:not(.activo):hover { background: rgba(255,255,255,0.05); color: #fff; }
-
-    section { padding: 20px 0; }
-    .eyebrow { font-size: 11px; letter-spacing: 0.15em; color: var(--os-cyan); text-transform: uppercase; margin-bottom: 4px; }
-    section h2 { font-size: 1.4rem; letter-spacing: 0.05em; text-transform: uppercase; color: #fff; }
-    .section-intro { margin: 6px 0 18px; color: var(--os-muted); font-size: 12px; }
-
-    .panel-grid { position: relative; min-height: 520px; }
-    .doc-panel {
-      display: none;
-      width: 100%;
-      background: var(--os-window);
-      color: var(--os-text);
-      border: 1px solid var(--os-border);
-      border-radius: 6px;
-      padding: 24px;
-      box-shadow: 0 16px 36px rgba(0,0,0,0.5);
-      position: absolute;
-      inset: 0 auto auto 0;
-    }
-    .doc-panel.activo { display: block; }
-    .doc-panel.entrando-derecha, .doc-panel.entrando-izquierda { display: block; animation: winIn .2s ease-out both; }
-    .doc-panel.saliendo-izquierda, .doc-panel.saliendo-derecha { display: block; pointer-events: none; animation: winOut .2s ease-in both; }
-    @keyframes winIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-    @keyframes winOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.98); } }
-
-    .doc-panel h3 { font-size: 1.25rem; text-transform: uppercase; color: #fff; margin-bottom: 16px; }
-    
-    .field-grid, .field { display: grid; gap: 14px; }
-    .field { gap: 6px; }
-    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    label { font-size: 11px; font-weight: 700; color: var(--os-accent); text-transform: uppercase; letter-spacing: 0.05em; }
-    input {
-      width: 100%;
-      background: #090d13;
-      border: 1px solid var(--os-border);
-      border-radius: 4px;
-      padding: 12px 14px;
-      font-size: 13px;
-      color: #fff;
-      outline: none;
-      font-family: inherit;
-    }
-    input:focus { border-color: var(--os-cyan); box-shadow: 0 0 8px var(--os-cyan-dim); }
-    .hint { font-size: 11px; color: var(--os-muted); }
-
-    .doc-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
-    .btn.dark { background: var(--os-cyan); color: #000; border-color: var(--os-cyan); }
-    .btn.dark:hover { background: #5ef5ff; }
-    .btn.paper { background: transparent; color: var(--os-text); border: 1px solid var(--os-border); }
-    .btn.paper:hover { border-color: #fff; background: rgba(255,255,255,0.05); }
-
-    .preview-box {
-      margin-top: 18px;
-      min-height: 100px;
-      background: #080c14;
-      border: 1px solid var(--os-border);
-      border-left: 3px solid var(--os-cyan);
-      border-radius: 4px;
-      padding: 14px;
-      white-space: pre-line;
-      font-size: 12px;
-      color: #cbd5e1;
-      font-family: inherit;
-    }
-    .count-board { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
-    .kpi {
-      background: #0a0f18;
-      border: 1px solid var(--os-border);
-      border-radius: 4px;
-      padding: 16px;
-    }
-    .kpi span { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--os-muted); }
-    .kpi strong { display: block; font-family: 'Share Tech Mono', monospace; font-size: 1.8rem; color: var(--os-cyan); margin-top: 4px; }
-    .status { margin-top: 10px; font-weight: 700; font-size: 12px; }
-    .status.ok { color: var(--os-success); }
-    .status.error { color: var(--os-error); }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 100;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      backdrop-filter: blur(4px);
-    }
-    .modal.abierto { display: flex; }
-    .modal-card {
-      width: min(420px, 100%);
-      background: var(--os-window);
-      border: 1px solid var(--os-cyan);
-      border-radius: 6px;
-      padding: 24px;
-      box-shadow: 0 0 30px rgba(0,240,255,0.15);
-      position: relative;
-    }
-    .modal-card::before {
-      content: "AUTH_GATEWAY // PROMPT";
-      position: absolute;
-      top: -10px;
-      left: 12px;
-      background: var(--os-border);
-      color: var(--os-cyan);
-      font-size: 9px;
-      padding: 2px 6px;
-      border-radius: 2px;
-    }
-    .modal-card h2 { font-size: 1.2rem; margin-bottom: 6px; color: #fff; text-transform: uppercase; }
-    .modal-card p { color: var(--os-muted); font-size: 12px; margin-bottom: 16px; }
-    .modal-card label { display: block; margin-bottom: 6px; }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
-    .modal-actions button {
-      height: 36px;
-      padding: 0 16px;
-      border-radius: 4px;
-      border: 1px solid transparent;
-      font-family: inherit;
-      font-weight: 700;
-      font-size: 12px;
-      cursor: pointer;
-      text-transform: uppercase;
-    }
-    .btn-cancelar { background: transparent; border-color: var(--os-border) !important; color: var(--os-muted); }
-    .btn-cancelar:hover { background: rgba(255,255,255,0.05); color: #fff; }
-    .btn-entrar { background: var(--os-cyan); color: #000; }
-    .btn-entrar:hover { background: #5ef5ff; }
-    .modal-error { display: none; color: var(--os-error); font-size: 11px; margin-top: 8px; }
-    .modal-error.visible { display: block; }
-
-    @media(max-width:768px) {
-      .field-row, .count-board { grid-template-columns: 1fr; }
-      .tabnav .inner { flex-direction: column; align-items: flex-start; padding: 10px 0; }
-    }
-  </style>
-</head>
-<body>
-  <nav class="tabnav">
-    <div class="wrap inner">
-      <div class="logos">
-        <div class="fake-logo">⚡</div>
-        <div class="divider"></div>
-        <div class="mini-logo">🛡️</div>
-        <span class="brand-text">UME<small>HISPANLIFE RP</small></span>
-      </div>
-      <div class="navlinks">
-        <button id="abrirJefatura" type="button">Panel Jefatura</button>
-      </div>
-    </div>
-  </nav>
-
-  <header class="hero">
-    <div class="wrap">
-      <div class="case-no">SISTEMA UME // IDENT: REGISTRO-ACT-2026</div>
-      <h1>SISTEMA OPERATIVO UME</h1>
-      <p class="sub">Módulo de registro rápido de reanimaciones e historial individual.</p>
-      <div class="cta-row">
-        <button class="btn tab-btn activo" type="button" id="abrirRegistro">Registrar revive</button>
-        <button class="btn tab-btn" type="button" id="abrirRecuento">Ver recuento</button>
-      </div>
-    </div>
-  </header>
-
-  <section id="panel">
-    <div class="wrap">
-      <div class="eyebrow">MOD_OPERATIVO</div>
-      <h2>Terminal de Operaciones</h2>
-      <p class="section-intro">Introduce y consulta datos operativos sincronizados en tiempo real.</p>
-
-      <div class="panel-grid">
-        <div class="doc-panel activo" id="registro">
-          <h3>Registrar Reanimación</h3>
-          <div class="field-grid">
-            <div class="field">
-              <label for="agente">Nombre del agente</label>
-              <input id="agente" placeholder="Ej. Nil Pérez">
-            </div>
-            <div class="field-row">
-              <div class="field">
-                <label for="fecha">Fecha del servicio</label>
-                <input id="fecha" type="date">
-              </div>
-              <div class="field">
-                <label for="clip">Enlace de verificación (Clip o Imagen)</label>
-                <input id="clip" type="text" placeholder="https://clip.com/... o https://i.imgur.com/...">
-              </div>
-            </div>
-          </div>
-          <div class="doc-actions">
-            <button class="btn dark" type="button" id="guardarBtn">Guardar registro</button>
-            <button class="btn paper" type="button" id="copiarBtn">Copiar texto</button>
-          </div>
-          <div class="status" id="statusRegistro"></div>
-          <div class="preview-box" id="previewRegistro">Aquí aparecerá el texto generado del registro.</div>
-        </div>
-
-        <div class="doc-panel" id="recuento">
-          <h3>Consulta por Agente</h3>
-          <div class="field search-box">
-            <label for="buscarAgente">Agente a buscar</label>
-            <input id="buscarAgente" placeholder="Escribe el nombre del agente...">
-            <div class="hint">Filtro dinámico de registros en búfer local.</div>
-          </div>
-          <div class="count-board">
-            <div class="kpi"><span>Registros encontrados</span><strong id="resultadoRecuento">0</strong></div>
-            <div class="kpi"><span>Última fecha</span><strong id="ultimaFecha">—</strong></div>
-          </div>
-          <div class="preview-box" id="listadoAgente">No hay registros para este agente.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="wrap"></footer>
-
-  <div class="modal" id="modalJefatura" role="dialog" aria-modal="true">
-    <div class="modal-card">
-      <h2>Acceso Jefatura</h2>
-      <p>Credenciales de autorización requeridas.</p>
-      <label for="contrasenaJefatura">Password de seguridad</label>
-      <input id="contrasenaJefatura" type="password" placeholder="••••••••">
-      <div class="modal-error" id="errorJefatura">Acceso denegado. Clave no válida.</div>
-      <div class="modal-actions">
-        <button class="btn-cancelar" id="cancelarJefatura" type="button">Cancelar</button>
-        <button class="btn-entrar" id="entrarJefatura" type="button">Autenticar</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
+<script>
     const URL_APPS_SCRIPT =
       "https://script.google.com/macros/s/AKfycbzFAxE_bUtyto2tTELFqY-Kn4fugVsFf3aUH56nhceAsPkjXdhCTE67e5xwHL0_BhyAjg/exec";
 
     const registros = [];
     let registrosCargados = false;
+    let base64ArchivoLocal = null;
+    let nombreArchivoLocal = "";
+    let tipoMimeLocal = "";
 
     const abrirRegistro = document.getElementById("abrirRegistro");
     const abrirRecuento = document.getElementById("abrirRecuento");
@@ -404,6 +16,8 @@
     const agenteInput = document.getElementById("agente");
     const fechaInput = document.getElementById("fecha");
     const clipInput = document.getElementById("clip");
+    const archivoImagen = document.getElementById("archivoImagen");
+    const fileInfo = document.getElementById("fileInfo");
     const guardarBtn = document.getElementById("guardarBtn");
     const copiarBtn = document.getElementById("copiarBtn");
     const previewRegistro = document.getElementById("previewRegistro");
@@ -423,6 +37,66 @@
     }
 
     fechaInput.value = obtenerFechaLocalISO();
+
+    // Redimensiona y comprime la imagen para evitar desbordar Apps Script
+    function optimizarImagen(file, callback) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const maxDimension = 1200;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height && width > maxDimension) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else if (height > maxDimension) {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Devuelve base64 comprimido en JPEG
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.75);
+          callback(dataUrl);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    archivoImagen.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        nombreArchivoLocal = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+        tipoMimeLocal = "image/jpeg";
+        fileInfo.style.display = "block";
+        fileInfo.textContent = `Procesando imagen: ${file.name}...`;
+
+        optimizarImagen(file, (base64) => {
+          base64ArchivoLocal = base64;
+          fileInfo.textContent = `✓ Imagen lista: ${file.name}`;
+          clipInput.value = "";
+          clipInput.placeholder = "Archivo del PC seleccionado";
+        });
+      }
+    });
+
+    clipInput.addEventListener("input", () => {
+      if (clipInput.value.trim() !== "") {
+        base64ArchivoLocal = null;
+        nombreArchivoLocal = "";
+        tipoMimeLocal = "";
+        archivoImagen.value = "";
+        fileInfo.style.display = "none";
+      }
+    });
 
     function ajustarAlturaPanel() {
       const activo = document.querySelector(".doc-panel.activo");
@@ -516,7 +190,7 @@
     }
 
     function generarTextoRegistro(registro) {
-      const esImagen = /\.(jpeg|jpg|gif|png|webp)($|\?)/i.test(registro.clip);
+      const esImagen = /\.(jpeg|jpg|gif|png|webp)($|\?)/i.test(registro.clip) || String(registro.clip).includes("google.com");
       return [
         "REGISTRO UME · PERSONA REVIVIDA",
         "",
@@ -604,7 +278,7 @@
 
       listadoAgente.textContent = filtrados.length
         ? filtrados.map((registro, indice) => {
-            const esImagen = /\.(jpeg|jpg|gif|png|webp)($|\?)/i.test(registro.clip);
+            const esImagen = /\.(jpeg|jpg|gif|png|webp)($|\?)/i.test(registro.clip) || String(registro.clip).includes("google.com");
             return [
               `REGISTRO ${indice + 1} · PERSONA REVIVIDA`,
               `Agente: ${registro.agente}`,
@@ -641,13 +315,13 @@
       }
     }
 
-    async function guardarEnGoogle(registro) {
+    async function guardarEnGoogle(registroPayload) {
       const respuesta = await fetch(URL_APPS_SCRIPT, {
         method: "POST",
         headers: {
           "Content-Type": "text/plain;charset=utf-8"
         },
-        body: JSON.stringify(registro)
+        body: JSON.stringify(registroPayload)
       });
 
       const datos = await respuesta.json();
@@ -655,6 +329,7 @@
       if (!datos.ok) {
         throw new Error(datos.error || "No se pudo guardar en Google Sheets.");
       }
+      return datos.url || registroPayload.clip;
     }
 
     guardarBtn.addEventListener("click", async () => {
@@ -664,42 +339,47 @@
       const fecha = fechaInput.value;
       const clip = clipInput.value.trim();
 
-      if (!agente || !fecha || !clip) {
-        statusRegistro.textContent = "Completa nombre del agente, fecha y clip o imagen.";
+      if (!agente || !fecha || (!clip && !base64ArchivoLocal)) {
+        statusRegistro.textContent = "Completa nombre del agente, fecha y enlace o archivo de imagen.";
         statusRegistro.classList.add("error");
         return;
       }
 
-      if (!esUrlValida(clip)) {
-        statusRegistro.textContent = "Debes ingresar un enlace válido (URL).";
+      if (clip && !base64ArchivoLocal && !esUrlValida(clip)) {
+        statusRegistro.textContent = "Debes ingresar un enlace URL válido si no subes un archivo.";
         statusRegistro.classList.add("error");
         return;
       }
 
-      const duplicado = registros.some(registro => {
-        return normalizarTexto(registro.agente) === normalizarTexto(agente) &&
-          fechaParaOrdenar(registro.fecha) === fechaParaOrdenar(fecha) &&
-          registro.clip === clip;
-      });
+      const payload = {
+        agente,
+        fecha,
+        clip: clip || "",
+        archivoBase64: base64ArchivoLocal || "",
+        nombreArchivo: nombreArchivoLocal || "",
+        tipoMime: tipoMimeLocal || ""
+      };
 
-      if (duplicado) {
-        statusRegistro.textContent = "Ese registro ya existe.";
-        statusRegistro.classList.add("error");
-        return;
-      }
-
-      const registro = { agente, fecha, clip };
       guardarBtn.disabled = true;
-      guardarBtn.textContent = "Guardando...";
+      guardarBtn.textContent = base64ArchivoLocal ? "Subiendo a Drive..." : "Guardando...";
 
       try {
-        await guardarEnGoogle(registro);
-        registros.unshift(registro);
-        previewRegistro.textContent = generarTextoRegistro(registro);
-        statusRegistro.textContent = "Registro guardado correctamente.";
+        const urlFinal = await guardarEnGoogle(payload);
+        const nuevoReg = { agente, fecha, clip: urlFinal };
+        registros.unshift(nuevoReg);
+        previewRegistro.textContent = generarTextoRegistro(nuevoReg);
+        statusRegistro.textContent = "Registro e imagen guardados correctamente.";
         statusRegistro.classList.add("ok");
+
+        // Limpieza de campos
         agenteInput.value = "";
         clipInput.value = "";
+        clipInput.placeholder = "https://clip.com/... o https://i.imgur.com/...";
+        archivoImagen.value = "";
+        base64ArchivoLocal = null;
+        nombreArchivoLocal = "";
+        tipoMimeLocal = "";
+        fileInfo.style.display = "none";
         fechaInput.value = obtenerFechaLocalISO();
         actualizarRecuento();
       } catch (error) {
@@ -778,5 +458,3 @@
     setInterval(cargarRegistros, 5000);
     setTimeout(ajustarAlturaPanel, 0);
   </script>
-</body>
-</html>
