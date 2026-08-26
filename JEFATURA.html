@@ -1,262 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JEFATURA // UME HISPANLIFE</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Jefatura UME · Recuento de reanimaciones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --os-bg:#090d13;
-  --os-window:#111827;
-  --os-header:#1f293d;
-  --os-border:#2e3d5b;
-  --os-cyan:#00f0ff;
-  --os-cyan-dim:rgba(0, 240, 255, 0.12);
-  --os-text:#e2e8f0;
-  --os-muted:#8899ac;
-  --os-error:#ef4444;
-  --os-accent:#38bdf8;
-}
-*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
-body{
-  min-height:100vh;
-  font-family:'IBM Plex Mono',monospace;
-  color:var(--os-text);
-  background:var(--os-bg);
-  background-image:linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-  background-size:32px 32px;
-  padding-bottom:50px;
-}
-.wrap{width:min(1140px,calc(100% - 32px));margin:auto}
-
-.tabnav{position:sticky;top:0;z-index:50;background:#080b11;border-bottom:2px solid var(--os-border);box-shadow:0 4px 20px rgba(0,0,0,.6)}
-.nav-inner{min-height:54px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.brand{font-size:16px;font-weight:700;color:#fff;letter-spacing:.1em}
-.brand small{display:block;font-size:10px;color:var(--os-muted);letter-spacing:.05em;font-weight:400}
-.navlinks{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-height:38px;padding:0 16px;border-radius:4px;
-  font:700 12px 'IBM Plex Mono',monospace;text-decoration:none;
-  border:1px solid transparent;cursor:pointer;text-transform:uppercase;transition:.2s ease;
-}
-.btn-outline{background:transparent;color:var(--os-muted);border-color:var(--os-border)}
-.btn-outline:hover{background:rgba(255,255,255,.05);color:#fff;border-color:#fff}
-.btn-gold{background:var(--os-cyan);color:#000;border-color:var(--os-cyan);box-shadow:0 0 10px var(--os-cyan-dim)}
-.btn-gold:hover{background:#5ef5ff}
-
-.hero{padding:32px 0 20px}
-.hero .wrap{
-  border:1px solid var(--os-border);
-  background:rgba(17,24,39,.7);backdrop-filter:blur(8px);
-  border-radius:6px;padding:24px;position:relative;
-}
-.hero .wrap::before{
-  content:"LEVEL_4_AUTHORIZATION // ACCESS GRANTED";
-  position:absolute;top:-10px;left:16px;background:var(--os-border);
-  color:var(--os-cyan);font-size:10px;padding:2px 8px;border-radius:2px;
-}
-.case-no{margin-bottom:8px;color:var(--os-muted);font-size:11px;letter-spacing:.15em;text-transform:uppercase}
-.hero h1{font-family:'Share Tech Mono',monospace;font-size:clamp(1.8rem,4vw,2.8rem);text-transform:uppercase;color:#fff;text-shadow:0 0 10px rgba(0,240,255,.2)}
-.sub{max-width:720px;margin:8px 0 0;color:var(--os-muted);font-size:.95rem}
-
-section{padding:20px 0}
-.eyebrow{margin-bottom:4px;color:var(--os-cyan);font-size:11px;letter-spacing:.15em;text-transform:uppercase}
-h2{font-size:1.4rem;letter-spacing:.05em;text-transform:uppercase;color:#fff}
-.section-intro{max-width:780px;margin:6px 0 18px;color:var(--os-muted);font-size:12px}
-.toolbar{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:16px}
-.search{min-width:min(100%,380px)}
-.search label{display:block;margin-bottom:6px;color:var(--os-accent);font-size:11px;font-weight:700;text-transform:uppercase}
-.search input{
-  width:100%;padding:12px 14px;border:1px solid var(--os-border);
-  border-radius:4px;outline:none;background:#090d13;color:#fff;font:13px 'IBM Plex Mono',monospace;
-}
-.search input:focus{border-color:var(--os-cyan);box-shadow:0 0 8px var(--os-cyan-dim)}
-.total{
-  padding:10px 16px;border:1px solid var(--os-border);border-radius:4px;
-  color:var(--os-muted);font-size:11px;background:#0a0f18;text-transform:uppercase;
-}
-.total strong{margin-left:8px;color:var(--os-cyan);font-size:18px;font-family:'Share Tech Mono',monospace}
-
-.rank-block{margin-top:24px}
-.rank-title{
-  display:flex;align-items:center;gap:12px;margin-bottom:12px;
-  color:var(--os-cyan);font-size:1.1rem;letter-spacing:.05em;text-transform:uppercase;
-}
-.rank-title::after{content:"";height:1px;flex:1;background:var(--os-border)}
-.agent-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.agent-card{
-  position:relative;width:100%;min-height:130px;padding:16px;text-align:left;
-  border:1px solid var(--os-border);border-radius:4px;background:var(--os-window);
-  color:var(--os-text);box-shadow:0 8px 20px rgba(0,0,0,.3);cursor:pointer;transition:.2s ease;
-  font-family:inherit;
-}
-.agent-card:hover{transform:translateY(-2px);border-color:var(--os-cyan);box-shadow:0 0 16px var(--os-cyan-dim)}
-.agent-rank{color:var(--os-muted);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
-.agent-name{margin-top:6px;font-size:1.1rem;font-weight:700;text-transform:uppercase;color:#fff;padding-right:26px}
-.agent-id{margin-top:2px;color:var(--os-accent);font-size:11px}
-.agent-count{display:flex;align-items:baseline;gap:6px;margin-top:14px}
-.agent-count strong{color:var(--os-cyan);font-family:'Share Tech Mono',monospace;font-size:1.6rem}
-.agent-count span{color:var(--os-muted);font-size:10px;text-transform:uppercase}
-.edit-agent{
-  position:absolute;right:12px;bottom:12px;width:26px;height:26px;display:grid;
-  place-items:center;border:1px solid var(--os-border);border-radius:3px;
-  background:#090d13;color:var(--os-muted);font-size:12px;cursor:pointer;transition:.2s ease;
-}
-.edit-agent:hover{background:var(--os-cyan);color:#000;border-color:var(--os-cyan)}
-.empty{padding:16px;border:1px dashed var(--os-border);border-radius:4px;color:var(--os-muted);font-size:12px;margin-top:12px}
-
-.modal-backdrop{
-  position:fixed;inset:0;z-index:100;display:none;place-items:center;
-  padding:16px;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);
-}
-.modal-backdrop.visible{display:grid;animation:fadeIn .15s ease both}
-.modal{
-  width:min(680px,100%);max-height:min(760px,calc(100vh - 36px));overflow:auto;
-  padding:24px;border:1px solid var(--os-border);border-radius:6px;background:var(--os-window);
-  color:var(--os-text);box-shadow:0 20px 50px rgba(0,0,0,.8);animation:modalIn .15s ease both;
-}
-.small-modal{width:min(470px,100%)}
-.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;border-bottom:1px solid var(--os-border);padding-bottom:12px}
-.modal h3{font-size:1.25rem;text-transform:uppercase;color:#fff}
-.modal p{margin-top:4px;color:var(--os-muted);font-size:12px}
-.close-modal{background:transparent;border:none;color:var(--os-muted);font-size:20px;cursor:pointer}
-.close-modal:hover{color:#fff}
-.modal label{display:block;margin-top:14px;margin-bottom:6px;color:var(--os-accent);font-size:11px;font-weight:700;text-transform:uppercase}
-.modal input,.modal select{
-  width:100%;height:42px;padding:0 12px;border:1px solid var(--os-border);
-  border-radius:4px;outline:none;background:#090d13;color:#fff;font:13px 'IBM Plex Mono',monospace;
-}
-.modal input:focus,.modal select:focus{border-color:var(--os-cyan)}
-.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
-.modal-actions .cancel{background:transparent;color:var(--os-muted);border:1px solid var(--os-border)}
-.modal-actions .cancel:hover{color:#fff;background:rgba(255,255,255,.05)}
-.modal-actions .submit{background:var(--os-cyan);color:#000;border:1px solid var(--os-cyan)}
-.modal-actions .submit:hover{background:#5ef5ff}
-.form-error{min-height:16px;margin-top:8px;color:var(--os-error);font-size:11px;font-weight:700}
-
-.detail-kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.detail-kpi{padding:14px;border:1px solid var(--os-border);border-radius:4px;background:#0a0f18}
-.detail-kpi span{display:block;color:var(--os-muted);font-size:10px;text-transform:uppercase}
-.detail-kpi strong{display:block;margin-top:4px;color:var(--os-cyan);font-family:'Share Tech Mono',monospace;font-size:1.8rem}
-.revive-list{display:grid;gap:8px;margin-top:16px}
-.revive-item{padding:12px;border:1px solid var(--os-border);border-left:3px solid var(--os-cyan);border-radius:3px;background:#0a0f18}
-.revive-date{color:var(--os-muted);font-size:11px;text-transform:uppercase}
-.revive-link{display:inline-block;margin-top:6px;color:var(--os-cyan);font-size:12px;word-break:break-all}
-.revive-img-preview{margin-top:8px;max-width:100%;max-height:220px;border-radius:4px;border:1px solid var(--os-border);display:block}
-
-.delete-profile{
-  width:36px;height:36px;margin:16px 0 0 auto;display:none;place-items:center;
-  border:1px solid var(--os-border);border-radius:4px;background:transparent;
-  color:var(--os-muted);font-size:15px;cursor:pointer;transition:.2s ease;
-}
-.delete-profile:hover{background:var(--os-error);color:#fff;border-color:var(--os-error)}
-.delete-hint{display:none;margin-top:4px;text-align:right;color:var(--os-muted);font-size:10px}
-
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes modalIn{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
-@media(max-width:900px){.agent-grid{grid-template-columns:repeat(2,1fr)}.nav-inner{align-items:flex-start;padding:10px 0;flex-direction:column}}
-@media(max-width:600px){.agent-grid,.detail-kpis{grid-template-columns:1fr}.navlinks,.navlinks .btn,.modal-actions,.modal-actions .btn{width:100%}}
+:root{--bg:#0b1220;--panel:#efe7d6;--paper:#f6efe1;--ink:#131313;--muted:#5b554a;--navy:#162844;--gold:#c7a15d;--gold-light:#e8d2a3;--line:#d8c8a8;--white:#fffdf9;--error:#9f2b2b;--shadow:0 20px 50px rgba(0,0,0,.25)}*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{min-height:100vh;font-family:Inter,sans-serif;color:var(--white);background:radial-gradient(circle at top,rgba(199,161,93,.12),transparent 20%),linear-gradient(180deg,var(--bg),#09101b)}.wrap{width:min(1120px,calc(100% - 24px));margin:auto}.tabnav{position:sticky;top:0;z-index:50;background:rgba(8,12,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}.nav-inner{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font-family:Oswald,sans-serif;font-size:28px;letter-spacing:.04em;line-height:1}.brand small{display:block;margin-top:6px;color:#bfc9db;font:11px "IBM Plex Mono",monospace;letter-spacing:.08em}.navlinks{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 17px;border-radius:999px;font:700 14px Inter,sans-serif;text-decoration:none;border:1px solid transparent;cursor:pointer;transition:.2s ease}.btn:hover{transform:translateY(-1px)}.btn-outline{background:transparent;color:#f6f8fc;border-color:rgba(255,255,255,.2)}.btn-outline:hover{background:rgba(255,255,255,.08)}.btn-gold{background:var(--gold);color:#1e1912;border-color:var(--gold)}.hero{padding:58px 0 38px;text-align:center}.seal{width:94px;height:94px;margin:0 auto 16px;display:grid;place-items:center;border-radius:50%;background:#17355c;border:3px solid var(--gold);box-shadow:0 0 0 8px rgba(255,255,255,.06),0 18px 38px rgba(0,0,0,.34);font-size:38px}.case-no{margin-bottom:12px;color:#c8d2e2;font:12px "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}.hero h1{font-family:Oswald,sans-serif;font-size:clamp(2.8rem,6vw,5.4rem);line-height:.95;text-transform:uppercase}.sub{max-width:720px;margin:14px auto 0;color:#d4dbea;font-size:1.05rem}.motto{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px}.motto span{padding:10px 14px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.06);font:12px "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase}section{padding:28px 0 54px}.eyebrow{margin-bottom:10px;color:#c9d0dd;font:12px "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}h2{font-family:Oswald,sans-serif;font-size:clamp(2rem,4vw,3rem);letter-spacing:.02em;text-transform:uppercase}.section-intro{max-width:780px;margin-top:10px;color:#d6dceb}.toolbar{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:26px}.search{min-width:min(100%,380px)}.search label{display:block;margin-bottom:8px;color:var(--white);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}.search input{width:100%;padding:14px 15px;border:1px solid #ccb88f;border-radius:14px;outline:none;background:rgba(255,251,243,.96);color:var(--ink);font:15px Inter,sans-serif}.total{padding:15px 18px;border:1px solid rgba(255,255,255,.14);border-radius:16px;color:#dfe6f4;font:13px "IBM Plex Mono",monospace;text-transform:uppercase}.total strong{margin-left:8px;color:var(--gold-light);font-size:22px}.rank-block{margin-top:28px}.rank-title{display:flex;align-items:center;gap:12px;margin-bottom:14px;color:var(--gold-light);font-family:Oswald,sans-serif;font-size:1.7rem;letter-spacing:.04em;text-transform:uppercase}.rank-title::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,rgba(199,161,93,.7),transparent)}.agent-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.agent-card{position:relative;width:100%;min-height:162px;padding:18px;text-align:left;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,var(--panel),var(--paper));color:var(--ink);box-shadow:0 12px 28px rgba(0,0,0,.18);cursor:pointer;transition:.2s ease}.agent-card:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 16px 30px rgba(0,0,0,.28)}.agent-rank{color:var(--muted);font:11px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}.agent-name{margin-top:8px;font-family:Oswald,sans-serif;font-size:1.35rem;text-transform:uppercase;padding-right:28px}.agent-id{margin-top:3px;color:var(--muted);font-size:13px}.agent-count{display:flex;align-items:baseline;gap:7px;margin-top:20px}.agent-count strong{color:var(--navy);font-family:Oswald,sans-serif;font-size:2rem}.agent-count span{color:var(--muted);font-size:12px;text-transform:uppercase}.edit-agent{position:absolute;right:13px;bottom:12px;width:29px;height:29px;display:grid;place-items:center;border:1px solid #b79d71;border-radius:50%;background:#fffaf0;color:var(--navy);font-size:15px;cursor:pointer;transition:.2s ease}.edit-agent:hover{background:var(--gold);transform:scale(1.08)}.empty{padding:22px;border:1px dashed rgba(255,255,255,.3);border-radius:18px;color:#d6dceb}.modal-backdrop{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:18px;background:rgba(3,7,14,.74);backdrop-filter:blur(6px)}.modal-backdrop.visible{display:grid;animation:fadeIn .2s ease both}.modal{width:min(680px,100%);max-height:min(760px,calc(100vh - 36px));overflow:auto;padding:26px;border:1px solid var(--line);border-radius:26px;background:linear-gradient(180deg,var(--panel),var(--paper));color:var(--ink);box-shadow:var(--shadow);animation:modalIn .3s ease both}.small-modal{width:min(470px,100%)}.modal-head{display:flex;align-items:start;justify-content:space-between;gap:16px}.modal h3{font-family:Oswald,sans-serif;font-size:2rem;text-transform:uppercase}.modal p{margin-top:8px;color:var(--muted);font-size:14px}.modal label{display:block;margin-top:18px;margin-bottom:8px;color:var(--ink);font-size:13px;font-weight:700;text-transform:uppercase}.modal input,.modal select{width:100%;height:50px;padding:0 14px;border:1px solid #ccb88f;border-radius:14px;outline:none;background:#fffdf8;color:var(--ink);font:15px Inter,sans-serif}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}.modal-actions .cancel{background:#f4f2ee;color:#111;border-color:#d0c3aa}.modal-actions .submit{background:var(--navy);color:#fff;border-color:var(--navy)}.form-error{min-height:18px;margin-top:10px;color:var(--error);font-size:13px;font-weight:700}.detail-kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}.detail-kpi{padding:16px;border:1px solid #d5be95;border-radius:17px;background:#fffaf0}.detail-kpi span{display:block;color:var(--muted);font:11px "IBM Plex Mono",monospace;text-transform:uppercase}.detail-kpi strong{display:block;margin-top:5px;color:var(--navy);font-family:Oswald,sans-serif;font-size:2.1rem}.revive-list{display:grid;gap:10px;margin-top:18px}.revive-item{padding:14px;border-left:4px solid var(--gold);border-radius:10px;background:rgba(255,255,255,.55)}.revive-date{color:var(--muted);font:12px "IBM Plex Mono",monospace;text-transform:uppercase}.revive-link{display:inline-block;margin-top:7px;color:#223a60;font-weight:700;word-break:break-all}.delete-profile{width:42px;height:42px;margin:18px 0 0 auto;display:none;place-items:center;border:1px solid #c5b495;border-radius:50%;background:transparent;color:#665b4e;font-size:19px;cursor:pointer;transition:.22s ease}.delete-profile:hover{background:#c62828;color:#fff;border-color:#c62828;transform:scale(1.1) rotate(-8deg);box-shadow:0 0 0 6px rgba(198,40,40,.17)}.delete-hint{display:none;margin-top:6px;text-align:right;color:var(--muted);font-size:11px}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes modalIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}@media(max-width:900px){.agent-grid{grid-template-columns:repeat(2,1fr)}.nav-inner{align-items:flex-start;padding:10px 0;flex-direction:column}}@media(max-width:600px){.agent-grid{grid-template-columns:1fr}.detail-kpis{grid-template-columns:1fr}.modal{padding:20px}.navlinks,.navlinks .btn{width:100%}.modal-actions{flex-direction:column}.modal-actions .btn{width:100%}}
 </style>
 </head>
 <body>
-<nav class="tabnav">
-  <div class="wrap nav-inner">
-    <div class="brand">JEFATURA UME<small>PANEL DE AUDITORÍA</small></div>
-    <div class="navlinks">
-      <a class="btn btn-outline" href="https://ninjawiz23.github.io/Base-de-datos-UME/">Volver al panel</a>
-      <button class="btn btn-gold" type="button" id="abrirNuevoAgente">Añadir nuevo agente</button>
-    </div>
-  </div>
-</nav>
-
-<header class="hero">
-  <div class="wrap">
-    <div class="case-no">MOD: SUPERVISIÓN // SECTOR 7</div>
-    <h1>JEFATURA UME<br>AUDITORÍA DE REANIMACIONES</h1>
-    <p class="sub">Base de datos de reanimaciones para supervisión jerárquica de miembros en activo.</p>
-  </div>
-</header>
-
-<section>
-  <div class="wrap">
-    <div class="eyebrow">MONITOR_DATOS</div>
-    <h2>Listado de Personal y Registros</h2>
-    <p class="section-intro">Haz clic sobre un perfil para consultar el registro de clips o imágenes asociadas.</p>
-    
-    <div class="toolbar">
-      <div class="search">
-        <label for="buscarAgente">Búsqueda rápida</label>
-        <input id="buscarAgente" type="search" placeholder="Apodo, nombre, ID o rango..." autocomplete="off">
-      </div>
-      <div class="total">Total Reanimaciones Registradas: <strong id="totalReanimaciones">0</strong></div>
-    </div>
-    
-    <main id="listaRangos"></main>
-    <div id="mensajeVacio" class="empty" hidden>No hay agentes que coincidan con la búsqueda.</div>
-  </div>
-</section>
-
-<div class="modal-backdrop" id="detalleBackdrop">
-  <article class="modal" role="dialog" aria-modal="true" aria-labelledby="modalNombre">
-    <div class="modal-head">
-      <div>
-        <h3 id="modalNombre">Agente</h3>
-        <p id="modalRango">Rango UME</p>
-      </div>
-      <button class="close-modal" type="button" id="cerrarDetalle">×</button>
-    </div>
-    <div class="detail-kpis">
-      <div class="detail-kpi"><span>Total reanimaciones</span><strong id="modalTotal">0</strong></div>
-      <div class="detail-kpi"><span>Último servicio</span><strong id="modalFecha">—</strong></div>
-    </div>
-    <div class="revive-list" id="modalLista"></div>
-  </article>
-</div>
-
-<div class="modal-backdrop" id="nuevoBackdrop">
-  <form class="modal small-modal" id="nuevoAgenteForm">
-    <div class="modal-head">
-      <div>
-        <h3 id="tituloFormulario">Añadir nuevo agente</h3>
-        <p id="textoFormulario">Completa los datos para añadirlo a su rango correspondiente.</p>
-      </div>
-      <button class="close-modal" type="button" id="cerrarNuevo">×</button>
-    </div>
-    <label for="nuevoApodo">1. Indicativo / Apodo</label>
-    <input id="nuevoApodo" required placeholder="Ej. Shadow">
-    <label for="nuevoNombre">2. Nombre del agente</label>
-    <input id="nuevoNombre" required placeholder="Ej. Paul Agamuste">
-    <label for="nuevoRango">3. Rango jerárquico</label>
-    <select id="nuevoRango" required></select>
-    <label for="nuevaIdentificacion">4. Identificación <span style="font-weight:400;text-transform:none">(opcional)</span></label>
-    <input id="nuevaIdentificacion" placeholder="Ej. 123">
-    <div class="form-error" id="nuevoError"></div>
-    <div class="modal-actions">
-      <button class="btn cancel" type="button" id="cancelarNuevo">Cancelar</button>
-      <button class="btn submit" type="submit" id="guardarAgenteBtn">Añadir agente</button>
-    </div>
-    <button class="delete-profile" type="button" id="eliminarAgenteBtn" title="Eliminar perfil" aria-label="Eliminar perfil">🗑</button>
-    <div class="delete-hint">Eliminar este perfil</div>
-  </form>
-</div>
-
+<nav class="tabnav"><div class="wrap nav-inner"><div class="brand">UME<small>Policía Nacional · HispanLife Roleplay</small></div><div class="navlinks"><a class="btn btn-outline" href="https://ninjawiz23.github.io/Base-de-datos-UME/">Volver al panel</a><button class="btn btn-gold" type="button" id="abrirNuevoAgente">Añadir nuevo agente</button></div></div></nav>
+<header class="hero"><div class="wrap"><div class="seal">✚</div><div class="case-no">Gobierno de HispanLife · Unidad de Emergencias</div><h1>Jefatura UME<br>Recuento de reanimaciones</h1><p class="sub">Panel interno de supervisión para consultar las reanimaciones registradas por cada agente de la unidad.</p><div class="motto"><span>Jefatura</span><span>Control interno</span><span>Actividad UME</span></div></div></header>
+<section><div class="wrap"><div class="eyebrow">Consulta de jefatura</div><h2>Recuento de reanimaciones</h2><p class="section-intro">Selecciona un agente para consultar su número total de reanimaciones, la última fecha registrada y el listado completo de clips.</p><div class="toolbar"><div class="search"><label for="buscarAgente">Buscar agente</label><input id="buscarAgente" type="search" placeholder="Apodo, nombre, identificación o rango..." autocomplete="off"></div><div class="total">Reanimaciones totales <strong id="totalReanimaciones">0</strong></div></div><main id="listaRangos"></main><div id="mensajeVacio" class="empty" hidden>No hay agentes que coincidan con la búsqueda.</div></div></section>
+<div class="modal-backdrop" id="detalleBackdrop"><article class="modal" role="dialog" aria-modal="true" aria-labelledby="modalNombre"><div class="modal-head"><div><h3 id="modalNombre">Agente</h3><p id="modalRango">Rango UME</p></div><button class="close-modal" type="button" id="cerrarDetalle">×</button></div><div class="detail-kpis"><div class="detail-kpi"><span>Reanimaciones registradas</span><strong id="modalTotal">0</strong></div><div class="detail-kpi"><span>Última fecha registrada</span><strong id="modalFecha">—</strong></div></div><div class="revive-list" id="modalLista"></div></article></div>
+<div class="modal-backdrop" id="nuevoBackdrop"><form class="modal small-modal" id="nuevoAgenteForm"><div class="modal-head"><div><h3 id="tituloFormulario">Añadir nuevo agente</h3><p id="textoFormulario">Completa los datos para añadirlo a su rango correspondiente.</p></div><button class="close-modal" type="button" id="cerrarNuevo">×</button></div><label for="nuevoApodo">1. Apodo</label><input id="nuevoApodo" required placeholder="Ej. Shadow"><label for="nuevoNombre">2. Nombre del agente</label><input id="nuevoNombre" required placeholder="Ej. Paul Agamuste"><label for="nuevoRango">3. Rango</label><select id="nuevoRango" required></select><label for="nuevaIdentificacion">4. Identificación <span style="font-weight:400;text-transform:none">(opcional)</span></label><input id="nuevaIdentificacion" placeholder="Ej. 123"><div class="form-error" id="nuevoError"></div><div class="modal-actions"><button class="btn cancel" type="button" id="cancelarNuevo">Cancelar</button><button class="btn submit" type="submit" id="guardarAgenteBtn">Añadir agente</button></div><button class="delete-profile" type="button" id="eliminarAgenteBtn" title="Eliminar perfil" aria-label="Eliminar perfil">🗑</button><div class="delete-hint">Eliminar este perfil</div></form></div>
 <script>
 const URL_APPS_SCRIPT="https://script.google.com/macros/s/AKfycbzFAxE_bUtyto2tTELFqY-Kn4fugVsFf3aUH56nhceAsPkjXdhCTE67e5xwHL0_BhyAjg/exec";
 const rangos=["Jefe del Departamento","Sub-Jefe del Departamento","Asistente","Sub-Asistente","Agente avanzado","Agente","Agente de Campo","Recluta"];
 const agentes=[{rango:"Jefe del Departamento",miembros:[{apodo:"Phoenix",nombre:"Tony Shelby",identificacion:"707"},{apodo:"Onyx",nombre:"",identificacion:"013"},{apodo:"Rayo",nombre:"",identificacion:"666"}]},{rango:"Sub-Jefe del Departamento",miembros:[{apodo:"Orion",nombre:"",identificacion:"011"}]},{rango:"Asistente",miembros:[{apodo:"Cypher",nombre:"Antonio Reyes",identificacion:"007"}]},{rango:"Sub-Asistente",miembros:[{apodo:"Japo",nombre:"Nobu Tanaka",identificacion:"378"}]},{rango:"Agente avanzado",miembros:[]},{rango:"Agente",miembros:[{apodo:"Strike",nombre:"Richard Barrul",identificacion:"231"}]},{rango:"Agente de Campo",miembros:[{apodo:"Gaby",nombre:"John Williams",identificacion:"222"},{apodo:"Nano",nombre:"Jordi Fernandez",identificacion:"690"}]},{rango:"Recluta",miembros:[{apodo:"Cobra",nombre:"Oscar Molina",identificacion:"117"},{apodo:"Wilberto",nombre:"",identificacion:""},{apodo:"India",nombre:"Olivia Domínguez",identificacion:"555"},{apodo:"Liam Dominguez",nombre:"",identificacion:"088"},{apodo:"Shadow",nombre:"Paul Agamuste",identificacion:""}]}];
 const STORAGE_KEY_AGENTES="ume_agentes";
+const agentesPorDefecto=JSON.parse(JSON.stringify(agentes));
 try{const guardados=localStorage.getItem(STORAGE_KEY_AGENTES);if(guardados){const datos=JSON.parse(guardados);if(Array.isArray(datos))agentes.splice(0,agentes.length,...datos)}}catch(e){console.error("Error cargando perfiles guardados:",e)}
 function guardarAgentes(){try{localStorage.setItem(STORAGE_KEY_AGENTES,JSON.stringify(agentes))}catch(e){console.error("Error guardando perfiles:",e)}}
 const registros=[],listaRangos=document.getElementById("listaRangos"),buscarAgente=document.getElementById("buscarAgente"),totalReanimaciones=document.getElementById("totalReanimaciones"),mensajeVacio=document.getElementById("mensajeVacio"),detalleBackdrop=document.getElementById("detalleBackdrop"),nuevoBackdrop=document.getElementById("nuevoBackdrop"),nuevoRango=document.getElementById("nuevoRango"),nuevoForm=document.getElementById("nuevoAgenteForm"),nuevoError=document.getElementById("nuevoError"),eliminarBtn=document.getElementById("eliminarAgenteBtn");let agenteEditando=null;
 rangos.forEach(r=>{const o=document.createElement("option");o.value=r;o.textContent=r;nuevoRango.appendChild(o)});
-function normalizar(t){return String(t||"").toLocaleLowerCase("es").normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
-function identidades(a){return [a.apodo,a.nombre,`${a.apodo} ${a.nombre}`,`${a.nombre} ${a.apodo}`,a.identificacion].map(normalizar).filter(Boolean)}
-function fechaTexto(f){
+function normalizar(t){return String(t||"").toLocaleLowerCase("es").normalize("NFD").replace(/[\u0300-\u036f]/g,"")}function identidades(a){return [a.apodo,a.nombre,`${a.apodo} ${a.nombre}`,`${a.nombre} ${a.apodo}`,a.identificacion].map(normalizar).filter(Boolean)}function fechaTexto(f){
   if(!f)return"—";
   const valor=String(f).trim();
+
+  // Si Google Apps Script envía una fecha/hora ISO en UTC, por ejemplo
+  // 2026-08-22T22:00:00.000Z, se muestra en la zona horaria de España.
+  // Así corresponde al día real de la hoja: 23/08/2026.
   if(/^\d{4}-\d{2}-\d{2}T/.test(valor)){
     const d=new Date(valor);
     if(!Number.isNaN(d.getTime())){
@@ -268,124 +41,23 @@ function fechaTexto(f){
       }).format(d);
     }
   }
+
+  // Si llega solo la fecha YYYY-MM-DD, no se convierte de zona horaria.
   const iso=valor.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if(iso)return `${iso[3]}/${iso[2]}/${iso[1]}`;
+
   const es=valor.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/);
   if(es)return `${es[1].padStart(2,"0")}/${es[2].padStart(2,"0")}/${es[3]}`;
+
   return valor;
-}
-function esImagenUrl(url){return /\.(jpeg|jpg|gif|png|webp)($|\?)/i.test(url)}
-function nombreVisible(a){return a.nombre?`${a.apodo} · ${a.nombre}`:a.apodo}
-function registrosDelAgente(a){const nombres=identidades(a);return registros.filter(r=>{const registrado=normalizar(r.agente);return nombres.some(n=>registrado===n||registrado.includes(n)||n.includes(registrado))})}
-
-function pintar(){
-  const q=normalizar(buscarAgente.value);
-  listaRangos.innerHTML="";
-  let visibles=0,total=0;
-  agentes.forEach(g=>{
-    const ms=g.miembros.filter(a=>!q||normalizar(`${identidades(a).join(" ")} ${g.rango}`).includes(q));
-    if(!ms.length)return;
-    const bloque=document.createElement("section");
-    bloque.className="rank-block";
-    bloque.innerHTML=`<h3 class="rank-title">${g.rango}</h3>`;
-    const grid=document.createElement("div");
-    grid.className="agent-grid";
-    ms.forEach(a=>{
-      const cantidad=registrosDelAgente(a).length;
-      visibles++;
-      total+=cantidad;
-      const card=document.createElement("button");
-      card.type="button";
-      card.className="agent-card";
-      card.innerHTML=`<div class="agent-rank">${g.rango}</div><div class="agent-name">${nombreVisible(a)}</div>${a.identificacion?`<div class="agent-id">ID: ${a.identificacion}</div>`:""}<div class="agent-count"><strong>${cantidad}</strong><span>reanimaciones</span></div><span class="edit-agent" title="Editar perfil" aria-label="Editar perfil">✎</span>`;
-      card.addEventListener("click",()=>abrirDetalle(a,g.rango));
-      card.querySelector(".edit-agent").addEventListener("click",e=>{e.stopPropagation();abrirEditor(a,g.rango)});
-      grid.appendChild(card)
-    });
-    bloque.appendChild(grid);
-    listaRangos.appendChild(bloque)
-  });
-  totalReanimaciones.textContent=total;
-  mensajeVacio.hidden=visibles!==0;
-}
-
-function abrirDetalle(a,rango){
-  const rs=registrosDelAgente(a).sort((x,y)=>String(y.fecha).localeCompare(String(x.fecha)));
-  document.getElementById("modalNombre").textContent=nombreVisible(a);
-  document.getElementById("modalRango").textContent=a.identificacion?`${rango} · ID ${a.identificacion}`:rango;
-  document.getElementById("modalTotal").textContent=rs.length;
-  document.getElementById("modalFecha").textContent=rs.length?fechaTexto(rs[0].fecha):"—";
-  document.getElementById("modalLista").innerHTML=rs.length?rs.map(r=>{
-    const esImg=esImagenUrl(r.clip);
-    return `<div class="revive-item">
-      <div class="revive-date">${fechaTexto(r.fecha)}</div>
-      <div style="margin-top:6px;color:var(--os-text);font-size:12px">
-        REGISTRO UME · PERSONA REVIVIDA<br>
-        Agente: ${r.agente}<br>
-        Fecha: ${fechaTexto(r.fecha)}<br>
-        ${esImg ? 'Imagen' : 'Clip'}: <a class="revive-link" href="${r.clip}" target="_blank" rel="noopener noreferrer">${r.clip}</a>
-        ${esImg ? `<a href="${r.clip}" target="_blank" rel="noopener noreferrer"><img src="${r.clip}" class="revive-img-preview" alt="Verificación visual" /></a>` : ''}
-      </div>
-    </div>`;
-  }).join(""):"<div class='empty'>Este agente todavía no tiene reanimaciones registradas.</div>";
-  detalleBackdrop.classList.add("visible");
-}
-
-function cerrarDetalle(){detalleBackdrop.classList.remove("visible")}
-function abrirEditor(a,rango){agenteEditando={agente:a,rango};document.getElementById("tituloFormulario").textContent="Editar perfil";document.getElementById("textoFormulario").textContent="Modifica los datos del agente seleccionado.";document.getElementById("guardarAgenteBtn").textContent="Guardar cambios";eliminarBtn.style.display="grid";document.getElementById("nuevoApodo").value=a.apodo;document.getElementById("nuevoNombre").value=a.nombre;document.getElementById("nuevoRango").value=rango;document.getElementById("nuevaIdentificacion").value=a.identificacion||"";nuevoError.textContent="";nuevoBackdrop.classList.add("visible");document.getElementById("nuevoApodo").focus()}
-function abrirNuevo(){agenteEditando=null;nuevoForm.reset();document.getElementById("tituloFormulario").textContent="Añadir nuevo agente";document.getElementById("textoFormulario").textContent="Completa los datos para añadirlo a su rango correspondiente.";document.getElementById("guardarAgenteBtn").textContent="Añadir agente";eliminarBtn.style.display="none";nuevoError.textContent="";nuevoRango.value=rangos[0];nuevoBackdrop.classList.add("visible");document.getElementById("nuevoApodo").focus()}
-function cerrarNuevo(){nuevoBackdrop.classList.remove("visible");nuevoForm.reset();agenteEditando=null;eliminarBtn.style.display="none"}
-
-async function cargar(){
-  try{
-    const r=await fetch(`${URL_APPS_SCRIPT}?t=${Date.now()}`,{method:"GET",cache:"no-store"});
-    if(!r.ok)throw new Error(`HTTP ${r.status}`);
-    const d=await r.json();
-    if(!d.ok)throw new Error(d.error||"Respuesta no válida");
-    registros.splice(0,registros.length,...(d.registros||[]));
-    pintar();
-  }catch(e){
-    console.error("Error cargando Google Sheets:",e);
-    pintar();
-  }
-}
-
+}function nombreVisible(a){return a.nombre?`${a.apodo} · ${a.nombre}`:a.apodo}function registrosDelAgente(a){const nombres=identidades(a);return registros.filter(r=>{const registrado=normalizar(r.agente);return nombres.some(n=>registrado===n||registrado.includes(n)||n.includes(registrado))})}
+function pintar(){const q=normalizar(buscarAgente.value);listaRangos.innerHTML="";let visibles=0,total=0;agentes.forEach(g=>{const ms=g.miembros.filter(a=>!q||normalizar(`${identidades(a).join(" ")} ${g.rango}`).includes(q));if(!ms.length)return;const bloque=document.createElement("section");bloque.className="rank-block";bloque.innerHTML=`<h3 class="rank-title">${g.rango}</h3>`;const grid=document.createElement("div");grid.className="agent-grid";ms.forEach(a=>{const cantidad=registrosDelAgente(a).length;visibles++;total+=cantidad;const card=document.createElement("button");card.type="button";card.className="agent-card";card.innerHTML=`<div class="agent-rank">${g.rango}</div><div class="agent-name">${nombreVisible(a)}</div>${a.identificacion?`<div class="agent-id">Identificación: ${a.identificacion}</div>`:""}<div class="agent-count"><strong>${cantidad}</strong><span>reanimaciones</span></div><span class="edit-agent" title="Editar perfil" aria-label="Editar perfil">✎</span>`;card.addEventListener("click",()=>abrirDetalle(a,g.rango));card.querySelector(".edit-agent").addEventListener("click",e=>{e.stopPropagation();abrirEditor(a,g.rango)});grid.appendChild(card)});bloque.appendChild(grid);listaRangos.appendChild(bloque)});totalReanimaciones.textContent=total;mensajeVacio.hidden=visibles!==0}
+function abrirDetalle(a,rango){const rs=registrosDelAgente(a).sort((x,y)=>String(y.fecha).localeCompare(String(x.fecha)));document.getElementById("modalNombre").textContent=nombreVisible(a);document.getElementById("modalRango").textContent=a.identificacion?`${rango} · ID ${a.identificacion}`:rango;document.getElementById("modalTotal").textContent=rs.length;document.getElementById("modalFecha").textContent=rs.length?fechaTexto(rs[0].fecha):"—";document.getElementById("modalLista").innerHTML=rs.length?rs.map(r=>`<div class="revive-item"><div class="revive-date">${fechaTexto(r.fecha)}</div><div style="margin-top:6px;color:var(--ink);font-size:14px">REGISTRO UME · PERSONA REVIVIDA<br>Agente: ${r.agente}<br>Fecha: ${fechaTexto(r.fecha)}<br>Clip: <a class="revive-link" href="${r.clip}" target="_blank" rel="noopener noreferrer">${r.clip}</a></div></div>`).join(""):"<div class='empty' style='color:var(--muted);border-color:var(--line)'>Este agente todavía no tiene reanimaciones registradas.</div>";detalleBackdrop.classList.add("visible")}
+function cerrarDetalle(){detalleBackdrop.classList.remove("visible")}function abrirEditor(a,rango){agenteEditando={agente:a,rango};document.getElementById("tituloFormulario").textContent="Editar perfil";document.getElementById("textoFormulario").textContent="Modifica los datos del agente seleccionado.";document.getElementById("guardarAgenteBtn").textContent="Guardar cambios";eliminarBtn.style.display="grid";document.getElementById("nuevoApodo").value=a.apodo;document.getElementById("nuevoNombre").value=a.nombre;document.getElementById("nuevoRango").value=rango;document.getElementById("nuevaIdentificacion").value=a.identificacion||"";nuevoError.textContent="";nuevoBackdrop.classList.add("visible");document.getElementById("nuevoApodo").focus()}function abrirNuevo(){agenteEditando=null;nuevoForm.reset();document.getElementById("tituloFormulario").textContent="Añadir nuevo agente";document.getElementById("textoFormulario").textContent="Completa los datos para añadirlo a su rango correspondiente.";document.getElementById("guardarAgenteBtn").textContent="Añadir agente";eliminarBtn.style.display="none";nuevoError.textContent="";nuevoRango.value=rangos[0];nuevoBackdrop.classList.add("visible");document.getElementById("nuevoApodo").focus()}function cerrarNuevo(){nuevoBackdrop.classList.remove("visible");nuevoForm.reset();agenteEditando=null;eliminarBtn.style.display="none"}
+async function cargar(){try{const r=await fetch(`${URL_APPS_SCRIPT}?t=${Date.now()}`,{method:"GET",cache:"no-store"});if(!r.ok)throw new Error(`HTTP ${r.status}`);const d=await r.json();if(!d.ok)throw new Error(d.error||"Respuesta no válida");registros.splice(0,registros.length,...(d.registros||[]));pintar()}catch(e){console.error("Error cargando Google Sheets:",e);pintar()}}
 setInterval(cargar,5000);
-nuevoForm.addEventListener("submit",e=>{
-  e.preventDefault();
-  nuevoError.textContent="";
-  const apodo=document.getElementById("nuevoApodo").value.trim(),nombre=document.getElementById("nuevoNombre").value.trim(),rango=nuevoRango.value,identificacion=document.getElementById("nuevaIdentificacion").value.trim();
-  if(!apodo||!nombre||!rango){nuevoError.textContent="Completa apodo, nombre y rango.";return}
-  const actual=agenteEditando?.agente;
-  const existe=agentes.some(g=>g.miembros.some(a=>a!==actual&&normalizar(a.apodo)===normalizar(apodo)));
-  if(existe){nuevoError.textContent="Ese apodo ya está en uso.";return}
-  if(agenteEditando){
-    const anterior=agentes.find(g=>g.rango===agenteEditando.rango);
-    anterior.miembros=anterior.miembros.filter(a=>a!==actual);
-    agentes.find(g=>g.rango===rango).miembros.push({apodo,nombre,identificacion});
-  }else{
-    agentes.find(g=>g.rango===rango).miembros.push({apodo,nombre,identificacion});
-  }
-  guardarAgentes();pintar();cerrarNuevo();
-});
-
-eliminarBtn.addEventListener("click",()=>{
-  if(!agenteEditando)return;
-  if(!confirm(`¿Seguro que quieres eliminar el perfil de ${nombreVisible(agenteEditando.agente)}?`))return;
-  const grupo=agentes.find(g=>g.rango===agenteEditando.rango);
-  grupo.miembros=grupo.miembros.filter(a=>a!==agenteEditando.agente);
-  guardarAgentes();pintar();cerrarNuevo();
-});
-
-document.getElementById("abrirNuevoAgente").addEventListener("click",abrirNuevo);
-document.getElementById("cerrarNuevo").addEventListener("click",cerrarNuevo);
-document.getElementById("cancelarNuevo").addEventListener("click",cerrarNuevo);
-nuevoBackdrop.addEventListener("click",e=>{if(e.target===nuevoBackdrop)cerrarNuevo()});
-document.getElementById("cerrarDetalle").addEventListener("click",cerrarDetalle);
-detalleBackdrop.addEventListener("click",e=>{if(e.target===detalleBackdrop)cerrarDetalle()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){cerrarNuevo();cerrarDetalle()}});
-buscarAgente.addEventListener("input",pintar);
-cargar();
+nuevoForm.addEventListener("submit",e=>{e.preventDefault();nuevoError.textContent="";const apodo=document.getElementById("nuevoApodo").value.trim(),nombre=document.getElementById("nuevoNombre").value.trim(),rango=nuevoRango.value,identificacion=document.getElementById("nuevaIdentificacion").value.trim();if(!apodo||!nombre||!rango){nuevoError.textContent="Completa apodo, nombre y rango.";return}const actual=agenteEditando?.agente;const existe=agentes.some(g=>g.miembros.some(a=>a!==actual&&normalizar(a.apodo)===normalizar(apodo)));if(existe){nuevoError.textContent="Ese apodo ya está en uso.";return}if(agenteEditando){const anterior=agentes.find(g=>g.rango===agenteEditando.rango);anterior.miembros=anterior.miembros.filter(a=>a!==actual);agentes.find(g=>g.rango===rango).miembros.push({apodo,nombre,identificacion})}else{agentes.find(g=>g.rango===rango).miembros.push({apodo,nombre,identificacion})}guardarAgentes();pintar();cerrarNuevo()});
+eliminarBtn.addEventListener("click",()=>{if(!agenteEditando)return;if(!confirm(`¿Seguro que quieres eliminar el perfil de ${nombreVisible(agenteEditando.agente)}?`))return;const grupo=agentes.find(g=>g.rango===agenteEditando.rango);grupo.miembros=grupo.miembros.filter(a=>a!==agenteEditando.agente);guardarAgentes();pintar();cerrarNuevo()});document.getElementById("abrirNuevoAgente").addEventListener("click",abrirNuevo);document.getElementById("cerrarNuevo").addEventListener("click",cerrarNuevo);document.getElementById("cancelarNuevo").addEventListener("click",cerrarNuevo);nuevoBackdrop.addEventListener("click",e=>{if(e.target===nuevoBackdrop)cerrarNuevo()});document.getElementById("cerrarDetalle").addEventListener("click",cerrarDetalle);detalleBackdrop.addEventListener("click",e=>{if(e.target===detalleBackdrop)cerrarDetalle()});document.addEventListener("keydown",e=>{if(e.key==="Escape"){cerrarNuevo();cerrarDetalle()}});buscarAgente.addEventListener("input",pintar);cargar();
 </script>
 </body>
 </html>
