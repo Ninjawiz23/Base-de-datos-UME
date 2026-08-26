@@ -3,344 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA UME // HISPANLIFE</title>
+  <title>UME Policía Nacional HispanLife Roleplay</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --os-bg: #090d13;
-      --os-window: #111827;
-      --os-header: #1f293d;
-      --os-border: #2e3d5b;
-      --os-cyan: #00f0ff;
-      --os-cyan-dim: rgba(0, 240, 255, 0.15);
-      --os-text: #e2e8f0;
-      --os-muted: #8899ac;
-      --os-success: #10b981;
-      --os-error: #ef4444;
-      --os-accent: #38bdf8;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'IBM Plex Mono', monospace;
-      background: var(--os-bg);
-      background-image: 
-        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-      background-size: 32px 32px;
-      color: var(--os-text);
-      min-height: 100vh;
-      padding-bottom: 40px;
-    }
-    .wrap { width: min(1140px, calc(100% - 32px)); margin: auto; }
-    
-    .tabnav {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: #080b11;
-      border-bottom: 2px solid var(--os-border);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-    }
-    .tabnav .inner {
-      min-height: 54px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .logos { display: flex; align-items: center; gap: 12px; }
-    .fake-logo, .mini-logo {
-      display: grid;
-      place-items: center;
-      border-radius: 4px;
-      border: 1px solid var(--os-cyan);
-      background: var(--os-cyan-dim);
-      font-size: 14px;
-    }
-    .fake-logo { width: 34px; height: 34px; }
-    .mini-logo { width: 28px; height: 28px; }
-    .divider { width: 1px; height: 24px; background: var(--os-border); }
-    .brand-text {
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: 0.1em;
-    }
-    .brand-text small {
-      display: block;
-      font-size: 10px;
-      color: var(--os-muted);
-      font-weight: 400;
-      letter-spacing: 0.05em;
-    }
-    .navlinks button {
-      color: var(--os-cyan);
-      font-size: 12px;
-      font-weight: 700;
-      background: rgba(0, 240, 255, 0.05);
-      border: 1px solid var(--os-cyan);
-      border-radius: 4px;
-      padding: 8px 16px;
-      cursor: pointer;
-      text-transform: uppercase;
-      font-family: inherit;
-      transition: all .2s;
-    }
-    .navlinks button:hover {
-      background: var(--os-cyan);
-      color: #000;
-      box-shadow: 0 0 12px var(--os-cyan-dim);
-    }
-
-    .hero { padding: 32px 0 20px; }
-    .hero .wrap {
-      border: 1px solid var(--os-border);
-      background: rgba(17, 24, 39, 0.7);
-      backdrop-filter: blur(8px);
-      border-radius: 6px;
-      padding: 24px;
-      position: relative;
-    }
-    .hero .wrap::before {
-      content: "SYS_TERM // SECURE CONNECTION ESTABLISHED";
-      position: absolute;
-      top: -10px;
-      left: 16px;
-      background: var(--os-border);
-      color: var(--os-cyan);
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 2px;
-      letter-spacing: 0.1em;
-    }
-    .case-no {
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      color: var(--os-muted);
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    h1 {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      letter-spacing: 0.05em;
-      color: #fff;
-      text-shadow: 0 0 10px rgba(0,240,255,0.2);
-    }
-    .sub { margin: 8px 0 16px; color: var(--os-muted); font-size: 0.95rem; }
-    .cta-row { display: flex; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--os-border); padding-top: 16px; }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 38px;
-      padding: 0 16px;
-      border-radius: 4px;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 700;
-      text-decoration: none;
-      border: 1px solid transparent;
-      cursor: pointer;
-      text-transform: uppercase;
-      transition: all .2s;
-    }
-    .btn.tab-btn {
-      background: transparent;
-      color: var(--os-muted);
-      border: 1px solid var(--os-border);
-    }
-    .btn.tab-btn.activo {
-      background: var(--os-cyan);
-      color: #000;
-      border-color: var(--os-cyan);
-      box-shadow: 0 0 10px var(--os-cyan-dim);
-    }
-    .btn.tab-btn:not(.activo):hover { background: rgba(255,255,255,0.05); color: #fff; }
-
-    section { padding: 20px 0; }
-    .eyebrow { font-size: 11px; letter-spacing: 0.15em; color: var(--os-cyan); text-transform: uppercase; margin-bottom: 4px; }
-    section h2 { font-size: 1.4rem; letter-spacing: 0.05em; text-transform: uppercase; color: #fff; }
-    .section-intro { margin: 6px 0 18px; color: var(--os-muted); font-size: 12px; }
-
-    .panel-grid { position: relative; width: 100%; }
-    .doc-panel {
-      display: none;
-      width: 100%;
-      background: var(--os-window);
-      color: var(--os-text);
-      border: 1px solid var(--os-border);
-      border-radius: 6px;
-      padding: 24px;
-      box-shadow: 0 16px 36px rgba(0,0,0,0.5);
-    }
-    .doc-panel.activo { display: block; }
-
-    .doc-panel h3 { font-size: 1.25rem; text-transform: uppercase; color: #fff; margin-bottom: 16px; }
-    
-    .field-grid, .field { display: grid; gap: 14px; }
-    .field { gap: 6px; }
-    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    label { font-size: 11px; font-weight: 700; color: var(--os-accent); text-transform: uppercase; letter-spacing: 0.05em; }
-    input {
-      width: 100%;
-      background: #090d13;
-      border: 1px solid var(--os-border);
-      border-radius: 4px;
-      padding: 12px 14px;
-      font-size: 13px;
-      color: #fff;
-      outline: none;
-      font-family: inherit;
-    }
-    input:focus { border-color: var(--os-cyan); box-shadow: 0 0 8px var(--os-cyan-dim); }
-    .hint { font-size: 11px; color: var(--os-muted); }
-
-    .upload-box {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .file-btn {
-      flex-shrink: 0;
-      background: rgba(0, 240, 255, 0.1);
-      border: 1px dashed var(--os-cyan);
-      color: var(--os-cyan);
-      padding: 10px 14px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      text-transform: uppercase;
-      text-align: center;
-      transition: all .2s;
-    }
-    .file-btn:hover {
-      background: var(--os-cyan);
-      color: #000;
-    }
-    #archivoImagen { display: none; }
-    .file-selected {
-      font-size: 11px;
-      color: var(--os-success);
-      word-break: break-all;
-    }
-
-    .doc-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
-    .btn.dark { background: var(--os-cyan); color: #000; border-color: var(--os-cyan); }
-    .btn.dark:hover { background: #5ef5ff; }
-    .btn.paper { background: transparent; color: var(--os-text); border: 1px solid var(--os-border); }
-    .btn.paper:hover { border-color: #fff; background: rgba(255,255,255,0.05); }
-
-    .preview-box {
-      margin-top: 18px;
-      min-height: 100px;
-      background: #080c14;
-      border: 1px solid var(--os-border);
-      border-left: 3px solid var(--os-cyan);
-      border-radius: 4px;
-      padding: 14px;
-      white-space: pre-line;
-      font-size: 12px;
-      color: #cbd5e1;
-      font-family: inherit;
-    }
-    .count-board { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
-    .kpi {
-      background: #0a0f18;
-      border: 1px solid var(--os-border);
-      border-radius: 4px;
-      padding: 16px;
-    }
-    .kpi span { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--os-muted); }
-    .kpi strong { display: block; font-family: 'Share Tech Mono', monospace; font-size: 1.8rem; color: var(--os-cyan); margin-top: 4px; }
-    .status { margin-top: 10px; font-weight: 700; font-size: 12px; }
-    .status.ok { color: var(--os-success); }
-    .status.error { color: var(--os-error); }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 100;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      backdrop-filter: blur(4px);
-    }
-    .modal.abierto { display: flex; }
-    .modal-card {
-      width: min(420px, 100%);
-      background: var(--os-window);
-      border: 1px solid var(--os-cyan);
-      border-radius: 6px;
-      padding: 24px;
-      box-shadow: 0 0 30px rgba(0,240,255,0.15);
-      position: relative;
-    }
-    .modal-card::before {
-      content: "AUTH_GATEWAY // PROMPT";
-      position: absolute;
-      top: -10px;
-      left: 12px;
-      background: var(--os-border);
-      color: var(--os-cyan);
-      font-size: 9px;
-      padding: 2px 6px;
-      border-radius: 2px;
-    }
-    .modal-card h2 { font-size: 1.2rem; margin-bottom: 6px; color: #fff; text-transform: uppercase; }
-    .modal-card p { color: var(--os-muted); font-size: 12px; margin-bottom: 16px; }
-    .modal-card label { display: block; margin-bottom: 6px; }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
-    .modal-actions button {
-      height: 36px;
-      padding: 0 16px;
-      border-radius: 4px;
-      border: 1px solid transparent;
-      font-family: inherit;
-      font-weight: 700;
-      font-size: 12px;
-      cursor: pointer;
-      text-transform: uppercase;
-    }
-    .btn-cancelar { background: transparent; border-color: var(--os-border) !important; color: var(--os-muted); }
-    .btn-cancelar:hover { background: rgba(255,255,255,0.05); color: #fff; }
-    .btn-entrar { background: var(--os-cyan); color: #000; }
-    .btn-entrar:hover { background: #5ef5ff; }
-    .modal-error { display: none; color: var(--os-error); font-size: 11px; margin-top: 8px; }
-    .modal-error.visible { display: block; }
-
-    @media(max-width:768px) {
-      .field-row, .count-board { grid-template-columns: 1fr; }
-      .upload-box { flex-direction: column; align-items: stretch; }
-      .tabnav .inner { flex-direction: column; align-items: flex-start; padding: 10px 0; }
-    }
+    :root{--bg:#0b1220;--panel:#efe7d6;--paper:#f6efe1;--ink:#131313;--muted:#5b554a;--navy:#162844;--gold:#c7a15d;--line:#d8c8a8;--white:#fffdf9;--success:#1a7f43;--error:#9f2b2b;--shadow:0 20px 50px rgba(0,0,0,.25)}
+    *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+    body{font-family:Inter,sans-serif;background:radial-gradient(circle at top,rgba(199,161,93,.12),transparent 20%),linear-gradient(180deg,var(--bg),#09101b 100%);color:var(--white);min-height:100vh}
+    .wrap{width:min(1120px,calc(100% - 24px));margin:auto}
+    .tabnav{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);background:rgba(8,12,20,.84);border-bottom:1px solid rgba(255,255,255,.08)}
+    .tabnav .inner{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .logos{display:flex;align-items:center;gap:12px}.fake-logo,.mini-logo{display:grid;place-items:center;border-radius:50%;overflow:hidden;flex:0 0 auto}
+    .fake-logo{width:52px;height:52px;background:radial-gradient(circle at 30% 30%,#284a7b,var(--navy));border:2px solid rgba(255,255,255,.16)}
+    .mini-logo{width:42px;height:42px;background:linear-gradient(180deg,#21457a,#102746);border:2px solid rgba(255,255,255,.12)}
+    .divider{width:1px;height:34px;background:rgba(255,255,255,.18)}.brand-text{font-family:Oswald,sans-serif;font-size:28px;letter-spacing:.04em;line-height:1}
+    .brand-text small{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#bfc9db;letter-spacing:.08em;margin-top:6px}
+    .navlinks button{color:#dfe6f4;font-size:14px;font-weight:600;background:transparent;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:12px 18px;cursor:pointer;text-transform:uppercase;transition:.2s}
+    .navlinks button:hover{background:rgba(255,255,255,.08);transform:translateY(-1px)}
+    .hero{padding:64px 0 46px}.hero .wrap{text-align:center}.seal{width:108px;height:108px;margin:0 auto 16px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#2f5c9c 0,#132b4c 58%,#0a1525 100%);border:3px solid var(--gold);box-shadow:0 0 0 8px rgba(255,255,255,.06),0 18px 38px rgba(0,0,0,.34);display:grid;place-items:center}
+    .case-no{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:#c8d2e2;text-transform:uppercase;margin-bottom:12px}h1{font-family:Oswald,sans-serif;font-size:clamp(2.9rem,6vw,5.6rem);line-height:.95;letter-spacing:.03em;text-transform:uppercase}.sub{margin:14px auto 0;color:#d4dbea;max-width:700px;font-size:1.05rem}
+    .motto-ribbon{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px}.motto-ribbon span{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:10px 14px;border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase}.cta-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:24px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 18px;border-radius:999px;font-family:Inter,sans-serif;font-size:14px;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-1px)}.btn.tab-btn{background:transparent;color:#f6f8fc;border:1px solid rgba(255,255,255,.18)}.btn.tab-btn.activo{background:var(--gold);color:#1e1912;border-color:var(--gold);box-shadow:0 6px 22px rgba(199,161,93,.22)}.btn.tab-btn:not(.activo):hover{background:rgba(255,255,255,.08)}
+    section{padding:34px 0}.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:#c9d0dd;text-transform:uppercase;margin-bottom:10px}section h2{font-family:Oswald,sans-serif;font-size:clamp(2rem,4vw,3rem);letter-spacing:.02em;text-transform:uppercase}.section-intro{margin-top:10px;color:#d6dceb;max-width:760px}
+    .panel-grid{position:relative;margin-top:26px;min-height:602px;perspective:1800px}.doc-panel{display:none;width:100%;background:linear-gradient(180deg,var(--panel),var(--paper));color:var(--ink);border:1px solid var(--line);border-radius:28px;padding:26px;box-shadow:var(--shadow);position:absolute;inset:0 auto auto 0;overflow:hidden;transform-origin:left center;backface-visibility:hidden}.doc-panel.activo{display:block}.doc-panel.entrando-derecha{display:block;animation:pasarPaginaDerecha .55s cubic-bezier(.2,.75,.2,1) both}.doc-panel.entrando-izquierda{display:block;animation:pasarPaginaIzquierda .55s cubic-bezier(.2,.75,.2,1) both}.doc-panel.saliendo-izquierda{display:block;pointer-events:none;animation:salirPaginaIzquierda .45s ease-in both}.doc-panel.saliendo-derecha{display:block;pointer-events:none;animation:salirPaginaDerecha .45s ease-in both}
+    @keyframes pasarPaginaDerecha{from{opacity:0;transform:rotateY(-42deg) translateX(28px)}to{opacity:1;transform:rotateY(0) translateX(0)}}@keyframes pasarPaginaIzquierda{from{opacity:0;transform:rotateY(42deg) translateX(-28px)}to{opacity:1;transform:rotateY(0) translateX(0)}}@keyframes salirPaginaIzquierda{from{opacity:1;transform:rotateY(0)}to{opacity:0;transform:rotateY(-42deg) translateX(-28px)}}@keyframes salirPaginaDerecha{from{opacity:1;transform:rotateY(0)}to{opacity:0;transform:rotateY(42deg) translateX(28px)}}
+    .doc-panel:before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.42),transparent 42%);pointer-events:none}.stamp{position:absolute;right:22px;top:18px;border:2px solid rgba(159,43,43,.35);color:rgba(159,43,43,.75);padding:8px 12px;border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;transform:rotate(-7deg)}.doc-panel h3{font-family:Oswald,sans-serif;font-size:2rem;letter-spacing:.03em;text-transform:uppercase;margin-top:10px}.doc-sub{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin:6px 0 22px}.field-grid,.field{display:grid;gap:16px}.field{gap:8px}.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}label{font-size:13px;font-weight:700;color:#2a261f;text-transform:uppercase;letter-spacing:.04em}input{width:100%;background:rgba(255,251,243,.85);border:1px solid #ccb88f;border-radius:14px;padding:14px 15px;font-size:15px;color:#14120f;outline:none;font-family:Inter,sans-serif}input:focus{border-color:#8a6d37;box-shadow:0 0 0 3px rgba(199,161,93,.2)}.hint{font-size:12px;color:var(--muted)}.doc-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn.dark{background:var(--navy);color:#fff}.btn.paper{background:transparent;color:#241c10;border:1px solid #b79d71}.preview-box{margin-top:18px;min-height:110px;background:rgba(255,255,255,.48);border:1px dashed #bea373;border-radius:18px;padding:16px;white-space:pre-line;font-size:14px;color:#1d1a15}.count-board{display:grid;gap:16px;margin-top:18px}.kpi{background:#fffaf0;border:1px solid #d5be95;border-radius:20px;padding:18px 20px}.kpi span{display:block;font-size:12px;font-family:'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.kpi strong{display:block;font-family:Oswald,sans-serif;font-size:2.3rem;line-height:1;margin-top:6px}.search-box{margin-top:10px}.status{margin-top:12px;font-weight:700;font-size:14px}.status.ok{color:var(--success)}.status.error{color:var(--error)}footer{padding:0 0 50px;color:#bfc9db;font-size:14px}
+    .modal{display:none;position:fixed;z-index:100;inset:0;background:rgba(0,0,0,.66);align-items:center;justify-content:center;padding:16px}.modal.abierto{display:flex}.modal-card{width:min(420px,100%);background:linear-gradient(180deg,#efe8d8,#f7f0e2);color:#151515;border:1px solid #d8c8a8;border-radius:24px;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,.45);animation:modalEntrada .2s ease-out}.modal-card h2{font-family:Inter,sans-serif;font-size:27px;line-height:1.1;margin:0 0 10px;text-transform:uppercase}.modal-card p{color:#605a50;font-size:14px;margin-bottom:20px}.modal-card label{display:block;margin-bottom:8px}.modal-card input{height:50px;background:#fffdf8}.modal-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:42px}.modal-actions button{height:45px;padding:0 18px;border-radius:999px;border:0;font-weight:700;cursor:pointer;font-size:14px}.btn-cancelar{background:#f4f2ee;color:#111}.btn-entrar{background:#182d4b;color:#fff}.modal-error{display:none;color:var(--error);font-size:13px;margin-top:10px;font-weight:700}.modal-error.visible{display:block}
+    @keyframes modalEntrada{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @media(max-width:900px){.field-row{grid-template-columns:1fr}.tabnav .inner{padding:10px 0;align-items:flex-start;flex-direction:column}}@media(max-width:640px){.brand-text{font-size:22px}.seal{width:92px;height:92px}.doc-panel{padding:20px}.doc-panel h3{font-size:1.65rem}.cta-row,.doc-actions{flex-direction:column}.btn{width:100%}.panel-grid{min-height:680px}.modal-card h2{font-size:24px}.modal-actions{margin-top:32px}}
   </style>
 </head>
 <body>
   <nav class="tabnav">
     <div class="wrap inner">
       <div class="logos">
-        <div class="fake-logo">⚡</div>
+        <div class="fake-logo">🛡️</div>
         <div class="divider"></div>
-        <div class="mini-logo">🛡️</div>
-        <span class="brand-text">UME<small>HISPANLIFE RP</small></span>
+        <div class="mini-logo">⚡</div>
+        <span class="brand-text">UME<small>Policía Nacional HispanLife Roleplay</small></span>
       </div>
       <div class="navlinks">
-        <button id="abrirJefatura" type="button">Panel Jefatura</button>
+        <button id="abrirJefatura" type="button">Jefatura</button>
       </div>
     </div>
   </nav>
 
   <header class="hero">
     <div class="wrap">
-      <div class="case-no">SISTEMA UME // IDENT: REGISTRO-ACT-2026</div>
-      <h1>SISTEMA OPERATIVO UME</h1>
-      <p class="sub">Módulo de registro rápido de reanimaciones e historial individual.</p>
+      <div class="seal">🛡️</div>
+      <div class="case-no">Gobierno de HispanLife · Policía Nacional · Unidad de Emergencias</div>
+      <h1>Panel de control<br>UME</h1>
+      <p class="sub">Registro rápido de persona revivida y recuento por agente.</p>
+      <div class="motto-ribbon"><span>Control</span><span>Verificación</span><span>Transparencia</span></div>
       <div class="cta-row">
         <button class="btn tab-btn activo" type="button" id="abrirRegistro">Registrar revive</button>
         <button class="btn tab-btn" type="button" id="abrirRecuento">Ver recuento</button>
@@ -350,13 +64,15 @@
 
   <section id="panel">
     <div class="wrap">
-      <div class="eyebrow">MOD_OPERATIVO</div>
-      <h2>Terminal de Operaciones</h2>
-      <p class="section-intro">Introduce y consulta datos operativos sincronizados en tiempo real.</p>
+      <div class="eyebrow">Panel operativo</div>
+      <h2>Herramienta interna de la UME</h2>
+      <p class="section-intro">Registra clips de reanimación y consulta el recuento por agente.</p>
 
       <div class="panel-grid">
         <div class="doc-panel activo" id="registro">
-          <h3>Registrar Reanimación</h3>
+          <span class="stamp">Registro oficial</span>
+          <h3>Registrar persona revivida</h3>
+          <div class="doc-sub">UME · Policía Nacional · HispanLife</div>
           <div class="field-grid">
             <div class="field">
               <label for="agente">Nombre del agente</label>
@@ -364,17 +80,12 @@
             </div>
             <div class="field-row">
               <div class="field">
-                <label for="fecha">Fecha del servicio</label>
+                <label for="fecha">Fecha</label>
                 <input id="fecha" type="date">
               </div>
               <div class="field">
-                <label for="clip">Enlace (Clip / URL) o Archivo de Imagen</label>
-                <div class="upload-box">
-                  <input id="clip" type="text" placeholder="https://clip.com/... o https://i.imgur.com/...">
-                  <label for="archivoImagen" class="file-btn">Subir PC</label>
-                  <input type="file" id="archivoImagen" accept="image/*">
-                </div>
-                <div id="fileInfo" class="file-selected" style="display:none;"></div>
+                <label for="clip">Ingresar clip</label>
+                <input id="clip" type="url" placeholder="https://clip.com/video">
               </div>
             </div>
           </div>
@@ -387,15 +98,17 @@
         </div>
 
         <div class="doc-panel" id="recuento">
-          <h3>Consulta por Agente</h3>
+          <span class="stamp">Consulta interna</span>
+          <h3>Recuento por agente</h3>
+          <div class="doc-sub">Control de actividad</div>
           <div class="field search-box">
-            <label for="buscarAgente">Agente a buscar</label>
-            <input id="buscarAgente" placeholder="Escribe el nombre del agente...">
-            <div class="hint">Filtro dinámico de registros en búfer local.</div>
+            <label for="buscarAgente">Nombre del agente</label>
+            <input id="buscarAgente" placeholder="Escribe el nombre del agente">
+            <div class="hint">El recuento se actualiza mientras escribes.</div>
           </div>
           <div class="count-board">
             <div class="kpi"><span>Registros encontrados</span><strong id="resultadoRecuento">0</strong></div>
-            <div class="kpi"><span>Última fecha</span><strong id="ultimaFecha">—</strong></div>
+            <div class="kpi"><span>Última fecha registrada</span><strong id="ultimaFecha">—</strong></div>
           </div>
           <div class="preview-box" id="listadoAgente">No hay registros para este agente.</div>
         </div>
@@ -407,14 +120,14 @@
 
   <div class="modal" id="modalJefatura" role="dialog" aria-modal="true">
     <div class="modal-card">
-      <h2>Acceso Jefatura</h2>
-      <p>Credenciales de autorización requeridas.</p>
-      <label for="contrasenaJefatura">Password de seguridad</label>
-      <input id="contrasenaJefatura" type="password" placeholder="••••••••">
-      <div class="modal-error" id="errorJefatura">Acceso denegado. Clave no válida.</div>
+      <h2>Acceso de Jefatura</h2>
+      <p>Introduce la contraseña para abrir el panel de recuento.</p>
+      <label for="contrasenaJefatura">Contraseña</label>
+      <input id="contrasenaJefatura" type="password" placeholder="Escribe la contraseña">
+      <div class="modal-error" id="errorJefatura">Contraseña incorrecta.</div>
       <div class="modal-actions">
         <button class="btn-cancelar" id="cancelarJefatura" type="button">Cancelar</button>
-        <button class="btn-entrar" id="entrarJefatura" type="button">Autenticar</button>
+        <button class="btn-entrar" id="entrarJefatura" type="button">Entrar</button>
       </div>
     </div>
   </div>
@@ -425,19 +138,15 @@
 
     const registros = [];
     let registrosCargados = false;
-    let base64ArchivoLocal = null;
-    let nombreArchivoLocal = "";
-    let tipoMimeLocal = "";
 
     const abrirRegistro = document.getElementById("abrirRegistro");
     const abrirRecuento = document.getElementById("abrirRecuento");
     const panelRegistro = document.getElementById("registro");
     const panelRecuento = document.getElementById("recuento");
+    const panelGrid = document.querySelector(".panel-grid");
     const agenteInput = document.getElementById("agente");
     const fechaInput = document.getElementById("fecha");
     const clipInput = document.getElementById("clip");
-    const archivoImagen = document.getElementById("archivoImagen");
-    const fileInfo = document.getElementById("fileInfo");
     const guardarBtn = document.getElementById("guardarBtn");
     const copiarBtn = document.getElementById("copiarBtn");
     const previewRegistro = document.getElementById("previewRegistro");
@@ -447,88 +156,41 @@
     const ultimaFecha = document.getElementById("ultimaFecha");
     const listadoAgente = document.getElementById("listadoAgente");
 
-    function obtenerFechaLocalISO() {
-      const ahora = new Date();
-      const local = new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000);
-      return local.toISOString().slice(0, 10);
+    let hojaActual = "registro";
+    let cambiando = false;
+
+    fechaInput.value = new Date().toISOString().slice(0, 10);
+
+    function ajustarAlturaPanel() {
+      const activo = document.querySelector(".doc-panel.activo");
+      if (activo) panelGrid.style.minHeight = `${activo.offsetHeight}px`;
     }
-
-    fechaInput.value = obtenerFechaLocalISO();
-
-    function optimizarImagen(file, callback) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          const maxDimension = 1200;
-          let width = img.width;
-          let height = img.height;
-
-          if (width > height && width > maxDimension) {
-            height = Math.round((height * maxDimension) / width);
-            width = maxDimension;
-          } else if (height > maxDimension) {
-            width = Math.round((width * maxDimension) / height);
-            height = maxDimension;
-          }
-
-          const canvas = document.createElement("canvas");
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0, width, height);
-
-          const dataUrl = canvas.toDataURL("image/jpeg", 0.75);
-          callback(dataUrl);
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    archivoImagen.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        nombreArchivoLocal = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
-        tipoMimeLocal = "image/jpeg";
-        fileInfo.style.display = "block";
-        fileInfo.textContent = `Procesando imagen: ${file.name}...`;
-
-        optimizarImagen(file, (base64) => {
-          base64ArchivoLocal = base64;
-          fileInfo.textContent = `✓ Imagen lista: ${file.name}`;
-          clipInput.value = "";
-          clipInput.placeholder = "Archivo del PC seleccionado";
-        });
-      }
-    });
-
-    clipInput.addEventListener("input", () => {
-      if (clipInput.value.trim() !== "") {
-        base64ArchivoLocal = null;
-        nombreArchivoLocal = "";
-        tipoMimeLocal = "";
-        archivoImagen.value = "";
-        fileInfo.style.display = "none";
-      }
-    });
 
     function mostrarHoja(hoja) {
-      if (hoja === "registro") {
-        abrirRegistro.classList.add("activo");
-        abrirRecuento.classList.remove("activo");
-        panelRegistro.classList.add("activo");
-        panelRecuento.classList.remove("activo");
-      } else {
-        abrirRegistro.classList.remove("activo");
-        abrirRecuento.classList.add("activo");
-        panelRegistro.classList.remove("activo");
-        panelRecuento.classList.add("activo");
-      }
+      if (cambiando || hoja === hojaActual) return;
+      cambiando = true;
+
+      const anterior = hojaActual === "registro" ? panelRegistro : panelRecuento;
+      const siguiente = hoja === "registro" ? panelRegistro : panelRecuento;
+      const esRegistro = hoja === "registro";
+
+      abrirRegistro.classList.toggle("activo", esRegistro);
+      abrirRecuento.classList.toggle("activo", !esRegistro);
+      siguiente.classList.add("activo", esRegistro ? "entrando-izquierda" : "entrando-derecha");
+      anterior.classList.add(esRegistro ? "saliendo-derecha" : "saliendo-izquierda");
+
+      setTimeout(() => {
+        anterior.classList.remove("activo", "saliendo-derecha", "saliendo-izquierda");
+        siguiente.classList.remove("entrando-derecha", "entrando-izquierda");
+        hojaActual = hoja;
+        cambiando = false;
+        ajustarAlturaPanel();
+      }, 560);
     }
 
     abrirRegistro.addEventListener("click", () => mostrarHoja("registro"));
     abrirRecuento.addEventListener("click", () => mostrarHoja("recuento"));
+    window.addEventListener("resize", ajustarAlturaPanel);
 
     function esUrlValida(url) {
       try {
@@ -539,55 +201,48 @@
       }
     }
 
-    function obtenerPartesFecha(valor) {
-      if (!valor) return null;
-      const texto = String(valor).trim();
-      const fechaPura = texto.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
-      if (fechaPura) {
-        return {
-          anio: Number(fechaPura[1]),
-          mes: Number(fechaPura[2]),
-          dia: Number(fechaPura[3])
-        };
-      }
-      const espana = texto.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-      if (espana) {
-        return {
-          anio: Number(espana[3]),
-          mes: Number(espana[2]),
-          dia: Number(espana[1])
-        };
-      }
-      const fecha = new Date(texto);
-      if (!Number.isNaN(fecha.getTime())) {
-        return {
-          anio: fecha.getFullYear(),
-          mes: fecha.getMonth() + 1,
-          dia: fecha.getDate()
-        };
-      }
-      return null;
-    }
-
-    function fechaParaOrdenar(valor) {
-      const p = obtenerPartesFecha(valor);
-      return p ? p.anio * 10000 + p.mes * 100 + p.dia : 0;
-    }
-
     function formatearFecha(valor) {
-      const p = obtenerPartesFecha(valor);
-      if (!p) return "—";
-      return `${String(p.dia).padStart(2, "0")}/${String(p.mes).padStart(2, "0")}/${p.anio}`;
+      if (!valor) return "—";
+
+      const texto = String(valor).trim();
+      const iso = texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+      if (iso) {
+        const fecha = new Date(
+          Number(iso[1]),
+          Number(iso[2]) - 1,
+          Number(iso[3])
+        );
+        return fecha.toLocaleDateString("es-ES");
+      }
+
+      const españa = texto.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+
+      if (españa) {
+        const fecha = new Date(
+          Number(españa[3]),
+          Number(españa[2]) - 1,
+          Number(españa[1])
+        );
+        return fecha.toLocaleDateString("es-ES");
+      }
+
+      const fechaCompleta = new Date(texto);
+
+      if (!Number.isNaN(fechaCompleta.getTime())) {
+        return fechaCompleta.toLocaleDateString("es-ES");
+      }
+
+      return "—";
     }
 
     function generarTextoRegistro(registro) {
-      const esImagen = /\.(jpeg|jpg|gif|png|webp)($|\?)/i.test(registro.clip) || String(registro.clip).includes("google.com");
       return [
         "REGISTRO UME · PERSONA REVIVIDA",
         "",
         `Agente: ${registro.agente}`,
         `Fecha: ${formatearFecha(registro.fecha)}`,
-        `${esImagen ? 'Imagen' : 'Clip'}: ${registro.clip}`
+        `Clip: ${registro.clip}`
       ].join("\n");
     }
 
@@ -660,7 +315,7 @@
 
       const filtrados = registros
         .filter(registro => perteneceAlAgente(registro, nombre))
-        .sort((a, b) => fechaParaOrdenar(b.fecha) - fechaParaOrdenar(a.fecha));
+        .sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)));
 
       resultadoRecuento.textContent = String(filtrados.length);
       ultimaFecha.textContent = filtrados.length
@@ -668,16 +323,15 @@
         : "—";
 
       listadoAgente.textContent = filtrados.length
-        ? filtrados.map((registro, indice) => {
-            const esImagen = /\.(jpeg|jpg|gif|png|webp)($|\?)/i.test(registro.clip) || String(registro.clip).includes("google.com");
-            return [
-              `REGISTRO ${indice + 1} · PERSONA REVIVIDA`,
-              `Agente: ${registro.agente}`,
-              `Fecha: ${formatearFecha(registro.fecha)}`,
-              `${esImagen ? 'Imagen' : 'Clip'}: ${registro.clip}`
-            ].join("\n");
-          }).join("\n\n")
+        ? filtrados.map((registro, indice) => [
+            `REGISTRO ${indice + 1} · PERSONA REVIVIDA`,
+            `Agente: ${registro.agente}`,
+            `Fecha: ${formatearFecha(registro.fecha)}`,
+            `Clip: ${registro.clip}`
+          ].join("\n")).join("\n\n")
         : "No hay registros para este agente.";
+
+      ajustarAlturaPanel();
     }
 
     async function cargarRegistros() {
@@ -704,13 +358,13 @@
       }
     }
 
-    async function guardarEnGoogle(registroPayload) {
+    async function guardarEnGoogle(registro) {
       const respuesta = await fetch(URL_APPS_SCRIPT, {
         method: "POST",
         headers: {
           "Content-Type": "text/plain;charset=utf-8"
         },
-        body: JSON.stringify(registroPayload)
+        body: JSON.stringify(registro)
       });
 
       const datos = await respuesta.json();
@@ -718,7 +372,6 @@
       if (!datos.ok) {
         throw new Error(datos.error || "No se pudo guardar en Google Sheets.");
       }
-      return datos.url || registroPayload.clip;
     }
 
     guardarBtn.addEventListener("click", async () => {
@@ -728,48 +381,43 @@
       const fecha = fechaInput.value;
       const clip = clipInput.value.trim();
 
-      if (!agente || !fecha || (!clip && !base64ArchivoLocal)) {
-        statusRegistro.textContent = "Completa nombre del agente, fecha y enlace o archivo de imagen.";
+      if (!agente || !fecha || !clip) {
+        statusRegistro.textContent = "Completa nombre del agente, fecha y clip.";
         statusRegistro.classList.add("error");
         return;
       }
 
-      if (clip && !base64ArchivoLocal && !esUrlValida(clip)) {
-        statusRegistro.textContent = "Debes ingresar un enlace URL válido si no subes un archivo.";
+      if (!esUrlValida(clip)) {
+        statusRegistro.textContent = "El clip debe ser un enlace válido.";
         statusRegistro.classList.add("error");
         return;
       }
 
-      const payload = {
-        agente,
-        fecha,
-        clip: clip || "",
-        archivoBase64: base64ArchivoLocal || "",
-        nombreArchivo: nombreArchivoLocal || "",
-        tipoMime: tipoMimeLocal || ""
-      };
+      const duplicado = registros.some(registro => {
+        return normalizarTexto(registro.agente) === normalizarTexto(agente) &&
+          String(registro.fecha).slice(0, 10) === fecha &&
+          registro.clip === clip;
+      });
 
+      if (duplicado) {
+        statusRegistro.textContent = "Ese registro ya existe.";
+        statusRegistro.classList.add("error");
+        return;
+      }
+
+      const registro = { agente, fecha, clip };
       guardarBtn.disabled = true;
-      guardarBtn.textContent = base64ArchivoLocal ? "Subiendo a Drive..." : "Guardando...";
+      guardarBtn.textContent = "Guardando...";
 
       try {
-        const urlFinal = await guardarEnGoogle(payload);
-        const nuevoReg = { agente, fecha, clip: urlFinal };
-        registros.unshift(nuevoReg);
-        previewRegistro.textContent = generarTextoRegistro(nuevoReg);
+        await guardarEnGoogle(registro);
+        registros.unshift(registro);
+        previewRegistro.textContent = generarTextoRegistro(registro);
         statusRegistro.textContent = "Registro guardado correctamente.";
         statusRegistro.classList.add("ok");
-
-        // Reset de campos
         agenteInput.value = "";
         clipInput.value = "";
-        clipInput.placeholder = "https://clip.com/... o https://i.imgur.com/...";
-        archivoImagen.value = "";
-        base64ArchivoLocal = null;
-        nombreArchivoLocal = "";
-        tipoMimeLocal = "";
-        fileInfo.style.display = "none";
-        fechaInput.value = obtenerFechaLocalISO();
+        fechaInput.value = new Date().toISOString().slice(0, 10);
         actualizarRecuento();
       } catch (error) {
         statusRegistro.textContent = error.message;
@@ -777,6 +425,7 @@
       } finally {
         guardarBtn.disabled = false;
         guardarBtn.textContent = "Guardar registro";
+        ajustarAlturaPanel();
       }
     });
 
@@ -844,6 +493,7 @@
 
     cargarRegistros();
     setInterval(cargarRegistros, 5000);
+    setTimeout(ajustarAlturaPanel, 0);
   </script>
 </body>
 </html>
