@@ -205,35 +205,24 @@
       if (!valor) return "—";
 
       const texto = String(valor).trim();
-      const iso = texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
 
-      if (iso) {
-        const fecha = new Date(
-          Number(iso[1]),
-          Number(iso[2]) - 1,
-          Number(iso[3])
-        );
-        return fecha.toLocaleDateString("es-ES");
+      // 1. Si ya viene formateada tipo España (31/08/2026 o 31/8/2026) desde un guardado manual
+      const esMatch = texto.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+      if (esMatch) {
+        return `${parseInt(esMatch[1], 10)}/${parseInt(esMatch[2], 10)}/${esMatch[3]}`;
       }
 
-      const españa = texto.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-
-      if (españa) {
-        const fecha = new Date(
-          Number(españa[3]),
-          Number(españa[2]) - 1,
-          Number(españa[1])
-        );
-        return fecha.toLocaleDateString("es-ES");
+      // 2. Procesamos usando el objeto nativo Date. 
+      // Esto lee tanto "2026-08-31" (del input) como "2026-08-30T22:00:00.000Z" (de Google)
+      const d = new Date(texto);
+      
+      if (!Number.isNaN(d.getTime())) {
+        // Obligamos a que imprima la fecha basándose en el horario de Madrid (España),
+        // así compensa automáticamente las 22:00 UTC devolviendo el día correcto (00:00 del día siguiente).
+        return d.toLocaleDateString("es-ES", { timeZone: "Europe/Madrid" });
       }
 
-      const fechaCompleta = new Date(texto);
-
-      if (!Number.isNaN(fechaCompleta.getTime())) {
-        return fechaCompleta.toLocaleDateString("es-ES");
-      }
-
-      return "—";
+      return texto || "—";
     }
 
     function generarTextoRegistro(registro) {
